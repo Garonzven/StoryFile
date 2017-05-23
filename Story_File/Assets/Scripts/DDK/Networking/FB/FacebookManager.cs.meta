@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 13f05a84db12b694bb7bd2077b52e0d0
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - profilePicSprite: {fileID: 21300000, guid: 9e8268fc75757784d8097502c7e0026e, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

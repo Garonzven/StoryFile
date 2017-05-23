@@ -1,0 +1,106 @@
+Main Scripts Per Folder:
+
+Note: Their importance is being taken into account depending on the script's usage in the project. Very important scripts
+will be marked with one or multiple *. Not important scripts will not be in this list, there might still be in use but
+is very unlikely.
+
+- 2D:
+    - Sprites:
+        - Blinker.cs
+        - FadeSprite.cs (will be deprecated, but it might be in use. It will be replaced by Fader.cs)
+        - * SpriteChangeController.cs (being used in the Scoreboard)
+    - FollowMousePointer2D.cs
+    - GrabController2D.cs
+    - RandomSpriteAssigner.cs
+- 3D:
+    - Optimization:
+        - * BillboardManager.cs
+        - * BillboardsController.cs
+    - * CameraFacingBillboard.cs
+    - FollowThroughPlane.cs
+    - LookAt.cs
+    - MoveThroughPlane.cs
+    - OrientedOrbit.cs
+    - PlaneNormal.cs
+- AssetBundles:
+    - *** AssetBundlesLoader.cs
+    - * Bundle.cs
+- Base:
+    - Animations:
+        - AlignWith.cs
+        - AlignWithMultiple.cs
+        - AnimateAlpha.cs
+        - AnimateBase.cs
+        - AnimateGridLayout.cs
+        - AnimateScale.cs
+        - AnimateUVs.cs
+        - AnimatorBoolParamController.cs (might not be in use)
+        - AnimatorParamsController.cs (might not be in use)
+        - AnimTextures.cs (almost sure it is not in use)
+        - *** Fader.cs
+        - TransformAnimationCurve (don't know if it's in use)
+        - *** ValidationFlag.cs
+    - Classes:
+        - Check for usage since they're not well documented and some don't follow the line width conventions: 
+        AudioClipMark, ComponentStatus, CustomTransformAnimation, FilteredGameObjectList, GenericTransformAnimation, 
+        LateReference, MovementHolder, ObjectHolder, PhaseDescriptor, StoredTransform, TransformAnimationHolder
+        - ComposedEvent.cs
+        - DelayedAction.cs
+        - FadeSettings.cs
+        - Keyboard.cs
+        - All Searchable... scripts.
+    - Components:
+        - ChildrenRandomAssigner.cs
+        - *** CoroutineRunner.cs
+        - IsPrefab.cs
+    - CustomPropertyAttributes: Not necessary to check.
+    - Events:
+        - States:
+            - Check for usage since they're not well documented and some don't follow the line width conventions: 
+            BindBehaviourEnableDisable, FinalState, StateAfter
+            - DontDestroyOnLoad.cs
+            - FirstExecutionXxxxxxAfter.cs
+            - The rest are medium-low priority..
+        - Check for usage since they're not well documented and some don't follow the line width conventions: 
+        OnClickTransform
+        - ** AnimatorActions.cs
+        - EventTriggersXxxx.cs
+        - ** MindBubbleHandler.cs
+        - OnApplicationPaused.cs
+        - OnCollider2DEevents.cs
+        - OnColliderEvents.cs
+        - OnEnableStateChanged.cs
+        - OnMouseDownTrailSpawner.cs
+        - OnRaycastClicks.cs
+        - OnTap.cs
+        - OnTapDestroy.cs
+        - RaycastTarget.cs
+        - * SfxManagerActions.cs
+        - * SingleComposedEvent.cs
+    - Extensions: ***** All
+    - Fx:
+        - Transitions:
+            - *** AutoFade.cs
+            - FadeXxxxYyyy.cs
+            - ScreenFader.cs
+    - Managers:
+        - ** PauseManager.cs
+        - ** SfxManager.cs
+    - Misc:
+        - * CameraAspectSize.cs
+        - CameraAspectSizeAnimation.cs
+        - RendererGroup.cs
+        - * SceneDescriptor.cs
+    - Sfx:
+        - ** DelayedAudioClip.cs
+        - Sfx.cs
+    - Statics:
+        - ** Persistent.cs
+        - * Utilities.cs
+    - Trinary Software: MEC (More Effective Coroutines) plugin, this shouldn't be reviewed since it comes from a plugin, 
+    hence it shouldn't be modified.
+    - UI:
+        - AutoDraggableImage.cs
+        - CanvasCameraAssigner.cs
+        - CanvasGroupFader.cs (shouldn't be in use, but it might be, cause Fader.cs must be used instead) 
+        - ChildrenRandomSpritesAssigner.cs
