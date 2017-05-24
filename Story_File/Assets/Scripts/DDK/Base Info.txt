@@ -1,0 +1,2 @@
+The folder contains the DDK base scripts from which all others depend on, this folder MUST NOT depend on any exterior
+ folder. All folder in the DDK's root must be completely independent from each other except from Base.

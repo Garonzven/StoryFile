@@ -1,0 +1,22 @@
+Check Scripts:
+
+PlaneNormal
+OrientedOrbit
+ObjectSelector folder location and namespace
+UIFeedbackInput
+AnimateActor has unnecesary enum which is already built-in inside Unity. Also, check its name
+Tag, TagEditor, SettingsTagManager and SettingsTagManagerEditor can be improved.
+ClickOnFloatingItemsGameController ? should be renamed
+OnPhotoAlbumClick ?
+OnSecondPageClick ?
+Check if GrabController2D, Blinker, FadeText, FadeImages and FadeSprite are being used
+AnimatorRef and AnimatorsRef might not be necessary anymore.
+TransformAnimationCurve, AlphanumComparatorFast improve documentation
+Check Base folder.
+OnMouseUpAsButtonUIBlocker
+
+
+
+
+NOTES:
+- All scripts using Resources.Load.... should be improved to use direct references instead (not all apply)
