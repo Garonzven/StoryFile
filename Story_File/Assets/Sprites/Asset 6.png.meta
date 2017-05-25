@@ -1,0 +1,124 @@
+fileFormatVersion: 2
+guid: 61f35d53de4c97b43aa28c84b3a28870
+timeCreated: 1495661429
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Asset 6_0
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 14
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.48651153, y: 0.53877926}
+  spriteBorder: {x: 9, y: 12, z: 10, w: 10}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: iPhone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Asset 6_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 5
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 5, w: 5}
+      outline: []
+      tessellationDetail: 0
+    outline:
+    - - {x: -0.111278534, y: 13.328529}
+      - {x: -9.698457, y: 13.348781}
+      - {x: -13.24428, y: 4.709301}
+      - {x: -12.5766, y: -4.8762217}
+      - {x: -7.3059416, y: -5.281002}
+      - {x: 0.44511986, y: -4.7599897}
+      - {x: 9.698459, y: -13.34878}
+      - {x: 13.07736, y: -5.93338}
+      - {x: 12.91044, y: 4.264183}
+      - {x: 9.698452, y: 13.348784}
+    - - {x: 9.403135, y: -13.214468}
+      - {x: 11.906929, y: 0.08345795}
+      - {x: 4.618107, y: 3.811329}
+      - {x: 7.511381, y: -2.8654547}
+    - - {x: 14.021244, y: -4.812849}
+      - {x: 14.021244, y: -4.812849}
+      - {x: 15.690441, y: -4.812849}
+      - {x: 15.690441, y: -4.812849}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

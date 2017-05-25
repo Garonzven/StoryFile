@@ -26,11 +26,11 @@ public class AmandaScript : MonoBehaviour
             txtTalk.text = "HOLD TO TALK";
         }
     }
-    public void onPointerDownRaceButton()
+    public void onPointerDownButton()
     {
         isTalking = true;
     }
-    public void onPointerUpRaceButton()
+    public void onPointerUpButton()
     {
         isTalking = false;
     }
