@@ -68,6 +68,7 @@ namespace StoryFile
 			if( !videoPlayer )
 			{
 				Debug.LogError ("There is no video player reference, can't play the received video url", gameObject);
+				yield break;
 			}
 			videoPlayer.source = VideoSource.Url;
 			videoPlayer.url = QuestionsHandler.m_lastVideoUrl;
@@ -75,6 +76,7 @@ namespace StoryFile
 			while (!videoPlayer.isPrepared)
 				yield return null;
 			videoPlayer.Play ();
+			_ws.CloseAsync ();
 		}
 			
 		#region Callbacks
@@ -90,6 +92,7 @@ namespace StoryFile
 			Debug.Log ("Connected");
 			Debug.Log (_ws.Ping ());
 			//_ws.SendAsync ("Test Message", OnSent);
+
 			_ws.SendAsync ( _clip, OnSent );
 		}
 		void OnClose( object sender, CloseEventArgs e )

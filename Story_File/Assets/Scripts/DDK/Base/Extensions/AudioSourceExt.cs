@@ -7,6 +7,7 @@ using System.Linq;
 using DDK.Base.Statics;
 using DDK.Base.SoundFX;
 using MovementEffects;
+using System.IO;
 
 
 
@@ -1555,6 +1556,24 @@ namespace DDK.Base.Extensions
 			}
 			return false;
 		}
+		/*public static byte[] ConvertToWav( this AudioClip clip )
+		{
+			
+
+			/*var s2 = new FileStream("assets\\resources\\sounds\\s2.wav", FileMode.Create);
+			var bw = new BinaryWriter(s2); 
+			bw.Write(saveBytes);
+			s2.Close();
+
+			//Read s1.wav
+
+			var sr = new StreamReader(  );
+			var fileContents = sr.ReadToEnd();
+			var saveBytes = System.Text.Encoding.UTF8.GetBytes(fileContents);
+			var s = new System.IO.MemoryStream(saveBytes); 
+			var br = new BinaryReader(s);
+			sr.Close();
+		}*/
 		public static byte[] EncodeToWav( this AudioClip clip )
 		{
 			var samples = new float[clip.samples];
