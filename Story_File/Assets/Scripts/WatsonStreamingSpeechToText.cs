@@ -13,7 +13,8 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
     private int m_RecordingBufferSize = 2;
     private int m_RecordingHZ = 22050;
 
-    private SpeechToText m_SpeechToText = new SpeechToText();
+	internal bool m_mustListen;
+	internal SpeechToText m_SpeechToText = new SpeechToText();
 
     void Start()
     {
@@ -48,6 +49,14 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
             }
         }
     }
+	public void Listen( bool listen )
+	{
+		if( listen )
+		{
+			m_SpeechToText.StartListening(OnRecognize);
+		}
+		else m_SpeechToText.StopListening();
+	}
 
     private void StartRecording()
     {
@@ -101,7 +110,11 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 StopRecording();
                 yield break;
             }
-
+			if( !m_mustListen )
+			{
+				yield return null;
+				continue;
+			}
             if ((bFirstBlock && writePos >= midPoint)
               || (!bFirstBlock && writePos < midPoint))
             {
