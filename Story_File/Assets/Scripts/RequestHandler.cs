@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using WebSocketSharp;
 using DDK.Base.Extensions;
 using System;
+using UnityEngine.Video;
 
 namespace StoryFile
 {
@@ -12,11 +13,15 @@ namespace StoryFile
 
 		public string url = "https://www.quirksmode.org/html5/videos/big_buck_bunny.mp4";
 		public AudioSource audioSource;
+		public VideoPlayer videoPlayer;
 
 
 		WebSocket _ws;
 		byte[] _clip;
 		//string _clip;
+
+
+		public static bool m_Connected { get; private set; }
 
 
 		/// <summary>
@@ -27,11 +32,10 @@ namespace StoryFile
 
 		// Use this for initialization
 		void Start () {
-			_clip = audioSource.clip.EncodeToWav ();
+			//_clip = audioSource.clip.EncodeToWav ();
 			//_clip = Convert.ToBase64String( audioSource.clip.EncodeToWav () );
-			//_ws = new WebSocket (WSS_TRANSCRIPTION_URI);
-			_ws = new WebSocket ("ws://echo.websocket.org/");
-			//_ws.SetCredentials ("foo@bar.com", "opensource", true);
+			_ws = new WebSocket (WSS_TRANSCRIPTION_URI);
+			//_ws = new WebSocket ("ws://echo.websocket.org/");
 			_ws.EmitOnPing = true;
 
 			_ws.OnMessage += OnMessage;
@@ -39,56 +43,57 @@ namespace StoryFile
 			_ws.OnError += OnError;
 			_ws.OnClose += OnClose;
 
+			_ws.Compression = CompressionMethod.Deflate;
+			_ws.WaitTime = new TimeSpan (0, 1, 0);
+
+			//_ws.ConnectAsync ();
+		}
+
+
+		public void ConnectAsyncAndSendAudio()
+		{
+			_clip = audioSource.clip.EncodeToWav ();
 			_ws.ConnectAsync ();
-
-			//SendRequest ();
 		}
-
-		public void SendRequest()
+		public IEnumerator ConnectAsyncSendAudioAndWait()
 		{
-			StartCoroutine ( SendRequestAndWait () );
-		}
-
-
-		IEnumerator SendRequestAndWait()
-		{
-			//DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer ();
-			Dictionary<string, object> bodyData = new Dictionary<string, object> () {
-				{ "email", "foo@bar.com" },
-				{ "password", "opensource" }
-			};
-			UploadHandler uploadHandler = new UploadHandlerRaw ( Convert.FromBase64String ( bodyData.Serialize () ) ) {
-				contentType = "application-json",
-			};
-			UnityWebRequest request = new UnityWebRequest (url, "POST");
-			request.uploadHandler = uploadHandler;
-			request.SetRequestHeader ("APP-TOKEN", "secureapptoken");
-			request.SetRequestHeader ("Content-Length", "60");	
-
-			AsyncOperation asyncOperation = request.Send ();
-			yield return asyncOperation;
-			Debug.Log (asyncOperation.isDone);
-			Debug.Log (asyncOperation.progress);
-			if( !string.IsNullOrEmpty (request.error )  )
+			_clip = audioSource.clip.EncodeToWav ();
+			_ws.ConnectAsync ();
+			while (!m_Connected)
+				yield return null;
+			while (!QuestionsHandler.m_resquestInProgress)
+				yield return null;
+			while (QuestionsHandler.m_resquestInProgress)
+				yield return null;
+			if( !videoPlayer )
 			{
-				Debug.LogError (request.error);
+				Debug.LogError ("There is no video player reference, can't play the received video url", gameObject);
+				yield break;
 			}
-			else
-			{
-				Debug.Log (request.downloadHandler.data);
-			}
+			videoPlayer.source = VideoSource.Url;
+			videoPlayer.url = QuestionsHandler.m_lastVideoUrl;
+			videoPlayer.Prepare ();
+			while (!videoPlayer.isPrepared)
+				yield return null;
+			videoPlayer.Play ();
+			_ws.CloseAsync ();
 		}
+			
 		#region Callbacks
 		void OnMessage( object sender, MessageEventArgs e )
 		{
 			Debug.Log ("website says: " + e.Data);
+			//QuestionsHandler.m_question = e.Data;
+			//QuestionsHandler.Instance.SendRequest ();
 		}
 		void OnOpen( object sender, EventArgs e )
 		{ 
+			m_Connected = true;
 			Debug.Log ("Connected");
 			Debug.Log (_ws.Ping ());
-			_ws.SendAsync ("Balus", OnSent);
-			//_ws.SendAsync ( _clip, OnSent );
+			//_ws.SendAsync ("Test Message", OnSent);
+
+			_ws.SendAsync ( _clip, OnSent );
 		}
 		void OnClose( object sender, CloseEventArgs e )
 		{
