@@ -6,6 +6,7 @@ using WebSocketSharp;
 using DDK.Base.Extensions;
 using System;
 using UnityEngine.Video;
+using System.IO;
 
 namespace StoryFile
 {
@@ -92,8 +93,9 @@ namespace StoryFile
 			Debug.Log ("Connected");
 			Debug.Log (_ws.Ping ());
 			//_ws.SendAsync ("Test Message", OnSent);
-
+            FileInfo file = null;
 			_ws.SendAsync ( _clip, OnSent );
+           
 		}
 		void OnClose( object sender, CloseEventArgs e )
 		{
