@@ -8,12 +8,12 @@ using IBM.Watson.DeveloperCloud.DataTypes;
 public class WatsonStreamingSpeechToText : MonoBehaviour
 {
     private int m_RecordingRoutine = 0;
-    private string m_MicrophoneID = null;
+    internal string m_MicrophoneID = null;
+    internal bool m_mustListen;
     private AudioClip m_Recording = null;
     private int m_RecordingBufferSize = 2;
     private int m_RecordingHZ = 22050;
 
-	internal bool m_mustListen;
 	internal SpeechToText m_SpeechToText = new SpeechToText();
 
     void Start()
@@ -65,7 +65,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
         Listen( true );
     }
 
-    private void StartRecording()
+    public void StartRecording()
     {
         if (m_RecordingRoutine == 0)
         {
@@ -100,6 +100,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
         if (m_Recording == null)
         {
             StopRecording();
+            
             yield break;
         }
 
@@ -117,6 +118,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 StopRecording();
                 yield break;
             }
+
 			if( !m_mustListen )
 			{
 				yield return null;
@@ -163,6 +165,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 foreach (var alt in res.alternatives)
                 {
                     string text = alt.transcript;
+
                     Log.Debug("ExampleStreaming", string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? "Final" : "Interim", alt.confidence));
                 }
             }
