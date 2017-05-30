@@ -9,6 +9,8 @@ namespace StoryFile
 {
     public class AmandaHandler : MonoBehaviour
     {
+		public bool useWatson;
+		public CanvasGroup btRecord;
         public Text txtTalk;
         public Image imgMic;
         public Image imgButton;
@@ -23,21 +25,45 @@ namespace StoryFile
 
         public void OnPointerDownButton()
         {
-            txtTalk.text = RELEASE_TEXT;
-            imgMic.color = colorRelease;
-            imgButton.color = colorRelease;
-            mic.Record(true);
-            //watsonStreaming.m_mustListen = true;
+			if( !btRecord.interactable )
+			{
+				return;
+			}
+
+			SetupBt ( colorRelease, RELEASE_TEXT );
+			if( useWatson )
+			{
+				watsonStreaming.m_mustListen = true;
+			}
+			else {
+				mic.Record(true);
+			}
         }
         public void OnPointerUpButton()
         {
-            txtTalk.text = HOLD_TEXT;
-            imgMic.color = colorHold;
-            imgButton.color = colorHold;
-            mic.Record(false);
-            requestHandler.ConnectAsyncAndSendAudio();
-            /*watsonStreaming.m_mustListen = false;
-            watsonStreaming.Listen(false);*/
+			if( !btRecord.interactable )
+			{
+				return;
+			}
+
+			SetupBt ( colorHold, HOLD_TEXT );
+			if( useWatson )
+			{
+				watsonStreaming.m_mustListen = false;
+				watsonStreaming.Listen(false);
+			}
+			else {
+				mic.Record(false);
+				requestHandler.ConnectAsyncAndSendAudio();
+			}
         }
+
+
+		void SetupBt( Color color, string text )
+		{
+			txtTalk.text = text;
+			imgMic.color = color;
+			imgButton.color = color;
+		}
     }
 }

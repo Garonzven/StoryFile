@@ -46,7 +46,7 @@ VideoClipImporter:
   output:
     format: 1
     settings:
-      enableTranscoding: 0
+      enableTranscoding: 1
       codec: 0
       resizeFormat: 0
       aspectRatio: 0
@@ -59,9 +59,9 @@ VideoClipImporter:
     encodedStartFrame: 0
     encodedEndFrame: 6076
     streamedResource:
-      source: 
+      source: library/metadata/2f/2f4ecb6576346d94da9d09d28202d768.resource
       offset: 0
-      size: 1890164
+      size: 9039825
   userData: 
   assetBundleName: 
   assetBundleVariant: 

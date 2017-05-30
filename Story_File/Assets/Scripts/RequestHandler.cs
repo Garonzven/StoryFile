@@ -7,19 +7,26 @@ using DDK.Base.Extensions;
 using System;
 using UnityEngine.Video;
 using SimpleJSON;
+using DDK;
 
 namespace StoryFile
 {
 	public class RequestHandler : MonoBehaviour {
 
 		public string url = "https://www.quirksmode.org/html5/videos/big_buck_bunny.mp4";
-		public AudioSource audioSource;
+		public AudioSource micSource;
 		public VideoPlayer videoPlayer;
+		[Indent(1)]
+		public float transitionsDuration = 0.3f;
+		public CanvasGroup btRecord;
         public bool useWss;
 
 
 		WebSocket _ws;
 		byte[] _clip;
+		CanvasGroup _vPlayer;
+		WaitForSeconds _wait;
+		AudioSource _videoAudioSource;
 
 
 		public static bool m_Connected { get; private set; }
@@ -34,6 +41,13 @@ namespace StoryFile
 
 		// Use this for initialization
 		void Start () {
+
+			_wait = new WaitForSeconds (transitionsDuration);
+			_videoAudioSource = videoPlayer.GetComponent<AudioSource> ();
+			_vPlayer = videoPlayer.GetComponent<CanvasGroup> ();
+
+			videoPlayer.errorReceived += ErrorReceived;
+			videoPlayer.frameDropped += FrameDropped;
 
             if( useWss )
             {
@@ -61,11 +75,15 @@ namespace StoryFile
             UnityWebRequest request = UnityWebRequest.Post( HTTPS_TRANSCRIPTION_URI, wwwForm ); //new UnityWebRequest ( HTTPS_TRANSCRIPTION_URI, "POST" );
             request.downloadHandler = downloadHandler;
 
+			//Disable the record button
+			StartCoroutine( btRecord.AlphaTo ( 0.4f, transitionsDuration ) );
+			btRecord.interactable = false;
+
+			Debug.Log ("Sending Transcription Request");
             AsyncOperation www = request.Send ();
             yield return www;
 
             Debug.Log ( "Transcription Request done: " + www.isDone);
-            Debug.Log ( "Progress: " + www.progress);
             Debug.Log ( "Response Code: " + request.responseCode);
             if( !string.IsNullOrEmpty (request.error )  )
             {
@@ -98,7 +116,7 @@ namespace StoryFile
         /// </summary>
 		public IEnumerator ConnectAsyncSendAudioAndWait()
 		{
-			_clip = audioSource.clip.EncodeToWav ();
+			_clip = micSource.clip.EncodeToWav ();
             if( useWss ) {
                 _ws.ConnectAsync ();
                 while (!m_Connected)
@@ -127,20 +145,30 @@ namespace StoryFile
                 Debug.LogError ("There is no video player reference, can't play the received video url", gameObject);
                 yield break;
             }
-            if( videoPlayer.isPlaying )
-                videoPlayer.Stop();
-            videoPlayer.isLooping = false;
-            //Assign the Audio from Video to AudioSource to be played
-            videoPlayer.source = VideoSource.Url;
-            videoPlayer.url = QuestionsHandler.m_lastVideoUrl;
+			//Video Interruption
+			/*if( videoPlayer.isPlaying )
+			{
+				StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
+				yield return _wait;
+				videoPlayer.Stop();
+				_videoAudioSource.Stop ();
+			}*/
+			videoPlayer.url = QuestionsHandler.m_lastVideoUrl;
             videoPlayer.Prepare ();
             while (!videoPlayer.isPrepared)
                 yield return null;
-            videoPlayer.EnableAudioTrack(0, true);
-            videoPlayer.controlledAudioTrackCount = 1;
-            videoPlayer.SetTargetAudioSource(0, videoPlayer.GetComponent<AudioSource>());
+			StartCoroutine ( _vPlayer.AlphaTo ( 1f, transitionsDuration ) );
             videoPlayer.Play ();
-        }
+			while( !videoPlayer.isPlaying )
+				yield return null;
+			Debug.Log ("Video is playing");
+			while( videoPlayer.isPlaying )
+				yield return null;
+			Debug.Log ("Video is playing");
+			StartCoroutine( btRecord.AlphaTo ( 1f, transitionsDuration ) );
+			btRecord.interactable = true;
+			StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
+		}
 			
 		#region Callbacks
 		void OnMessage( object sender, MessageEventArgs e )
@@ -169,6 +197,15 @@ namespace StoryFile
 		void OnSent( bool completed )
 		{
 			Debug.Log ( "Sent: " + completed );
+		}
+
+		void ErrorReceived( VideoPlayer source, string msg )
+		{
+			Debug.LogError (msg);
+		}
+		void FrameDropped( VideoPlayer source )
+		{
+			Debug.LogWarning ("Frame Dropped");
 		}
 		#endregion
 	}
