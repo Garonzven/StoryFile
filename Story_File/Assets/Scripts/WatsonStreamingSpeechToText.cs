@@ -14,7 +14,8 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
     private int m_RecordingBufferSize = 2;
     private int m_RecordingHZ = 22050;
 
-    private SpeechToText m_SpeechToText = new SpeechToText();
+	internal bool m_mustListen;
+	internal SpeechToText m_SpeechToText = new SpeechToText();
 
     void Start()
     {
@@ -36,7 +37,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 m_SpeechToText.DetectSilence = true;
                 m_SpeechToText.EnableWordConfidence = false;
                 m_SpeechToText.EnableTimestamps = false;
-                m_SpeechToText.SilenceThreshold = 0.03f;
+                m_SpeechToText.SilenceThreshold = 0.25f; //0.03f;
                 m_SpeechToText.MaxAlternatives = 1;
                 m_SpeechToText.EnableContinousRecognition = true;
                 m_SpeechToText.EnableInterimResults = true;
@@ -48,6 +49,21 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 m_SpeechToText.StopListening();
             }
         }
+    }
+	public void Listen( bool listen )
+	{
+        if( listen )
+        {
+            m_SpeechToText.StartListening(OnRecognize);
+        }
+        else StartCoroutine( _StopListening() );
+	}
+    IEnumerator _StopListening()
+    {
+        m_SpeechToText.StopListening();
+        while( m_SpeechToText.IsListening )
+            yield return null;
+        Listen( true );
     }
 
     public void StartRecording()
@@ -103,6 +119,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 StopRecording();
                 yield break;
             }
+<<<<<<< HEAD
 
            /* if (!m_mustListen)
             {
@@ -110,6 +127,13 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 continue;
             }*/
 
+=======
+			if( !m_mustListen )
+			{
+				yield return null;
+				continue;
+			}
+>>>>>>> de14a192f2d1f6d256b9d4f9e7e7172ef1c3caa8
             if ((bFirstBlock && writePos >= midPoint)
               || (!bFirstBlock && writePos < midPoint))
             {
@@ -125,6 +149,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 m_SpeechToText.OnListen(record);
 
                 bFirstBlock = !bFirstBlock;
+                yield return null;
             }
             else
             {
@@ -135,8 +160,8 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
 
                 yield return new WaitForSeconds(timeRemaining);
             }
-
         }
+        Debug.Log(999);
 
         yield break;
     }

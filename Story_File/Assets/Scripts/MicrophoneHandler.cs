@@ -21,7 +21,7 @@ namespace Utils
 		{
 			if( record )
 			{
-				_source.clip = Microphone.Start( MIC_NAME, false, 10, 44100);
+				_source.clip = Microphone.Start( MIC_NAME, false, 15, 44100);
 			}
 			else { 
 				Microphone.End( MIC_NAME );

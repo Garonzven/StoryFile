@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e562125f88e5ee04f8d298fcac600cb6
-timeCreated: 1495661841
+timeCreated: 1496078351
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -39,7 +39,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 97, y: 0, z: 91, w: 0}
+  spriteBorder: {x: 122, y: 0, z: 121, w: 0}
   spritePixelsToUnits: 300
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -82,11 +82,19 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: WebGL
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
     outline: []
-  spritePackingTag: 
+  spritePackingTag: all
   userData: 
   assetBundleName: 
   assetBundleVariant: 
