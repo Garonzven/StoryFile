@@ -36,7 +36,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 m_SpeechToText.DetectSilence = true;
                 m_SpeechToText.EnableWordConfidence = false;
                 m_SpeechToText.EnableTimestamps = false;
-                m_SpeechToText.SilenceThreshold = 0.03f;
+                m_SpeechToText.SilenceThreshold = 0.25f; //0.03f;
                 m_SpeechToText.MaxAlternatives = 1;
                 m_SpeechToText.EnableContinousRecognition = true;
                 m_SpeechToText.EnableInterimResults = true;
@@ -51,12 +51,19 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
     }
 	public void Listen( bool listen )
 	{
-		if( listen )
-		{
-			m_SpeechToText.StartListening(OnRecognize);
-		}
-		else m_SpeechToText.StopListening();
+        if( listen )
+        {
+            m_SpeechToText.StartListening(OnRecognize);
+        }
+        else StartCoroutine( _StopListening() );
 	}
+    IEnumerator _StopListening()
+    {
+        m_SpeechToText.StopListening();
+        while( m_SpeechToText.IsListening )
+            yield return null;
+        Listen( true );
+    }
 
     private void StartRecording()
     {
@@ -130,6 +137,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 m_SpeechToText.OnListen(record);
 
                 bFirstBlock = !bFirstBlock;
+                yield return null;
             }
             else
             {
@@ -140,8 +148,8 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
 
                 yield return new WaitForSeconds(timeRemaining);
             }
-
         }
+        Debug.Log(999);
 
         yield break;
     }

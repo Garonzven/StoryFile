@@ -3,33 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Utils;
 
-public class AmandaHandler : MonoBehaviour
+namespace StoryFile
 {
-    public Text txtTalk;
-    public Image imgMic;
-    public Image imgButton;
-    public Color32 colorHold;
-    public Color32 colorRelease;
-	public WatsonStreamingSpeechToText watsonStreaming;
-
-    private const string HOLD_TEXT = "HOLD TO TALK";
-    private const string RELEASE_TEXT = "RELEASE TO LISTEN";
-
-    public void OnPointerDownButton()
+    public class AmandaHandler : MonoBehaviour
     {
-        txtTalk.text = RELEASE_TEXT;
-        imgMic.color = colorRelease;
-        imgButton.color = colorRelease;
-		watsonStreaming.m_mustListen = true;
-    }
-    public void OnPointerUpButton()
-    {
-        txtTalk.text = HOLD_TEXT;
-        imgMic.color = colorHold;
-        imgButton.color = colorHold;
-		watsonStreaming.m_mustListen = false;
-		watsonStreaming.Listen(false);
-		watsonStreaming.Listen (true);
+        public Text txtTalk;
+        public Image imgMic;
+        public Image imgButton;
+        public Color32 colorHold;
+        public Color32 colorRelease;
+        public WatsonStreamingSpeechToText watsonStreaming;
+        public RequestHandler requestHandler;
+        public MicrophoneHandler mic;
+
+        private const string HOLD_TEXT = "HOLD TO TALK";
+        private const string RELEASE_TEXT = "RELEASE TO LISTEN";
+
+        public void OnPointerDownButton()
+        {
+            txtTalk.text = RELEASE_TEXT;
+            imgMic.color = colorRelease;
+            imgButton.color = colorRelease;
+            mic.Record(true);
+            //watsonStreaming.m_mustListen = true;
+        }
+        public void OnPointerUpButton()
+        {
+            txtTalk.text = HOLD_TEXT;
+            imgMic.color = colorHold;
+            imgButton.color = colorHold;
+            mic.Record(false);
+            requestHandler.ConnectAsyncAndSendAudio();
+            /*watsonStreaming.m_mustListen = false;
+            watsonStreaming.Listen(false);*/
+        }
     }
 }
