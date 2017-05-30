@@ -104,11 +104,11 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 yield break;
             }
 
-            if (!m_mustListen)
+           /* if (!m_mustListen)
             {
                 yield return null;
                 continue;
-            }
+            }*/
 
             if ((bFirstBlock && writePos >= midPoint)
               || (!bFirstBlock && writePos < midPoint))
