@@ -918,8 +918,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000000032604, y: 65}
-  m_SizeDelta: {x: 65, y: 65}
+  m_AnchoredPosition: {x: 0, y: 65}
+  m_SizeDelta: {x: 53, y: 53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &584695184
 MonoBehaviour:
@@ -2135,7 +2135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 467912fb2ddbb21438698e04da75ee7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useWatson: 0
+  useWatson: 1
   btRecord: {fileID: 519597724}
   txtTalk: {fileID: 1248199473}
   imgMic: {fileID: 1877901599}
@@ -2149,6 +2149,8 @@ MonoBehaviour:
   watsonStreaming: {fileID: 1343401603}
   requestHandler: {fileID: 1419576559}
   mic: {fileID: 1919337307}
+  micDown: {fileID: 8300000, guid: d1dff78d759c3fe4ab6551e52dbfa84a, type: 3}
+  micUp: {fileID: 8300000, guid: ed21db03f3c61684dbb17f91b2b8b787, type: 3}
 --- !u!4 &1419576558
 Transform:
   m_ObjectHideFlags: 0
@@ -2356,8 +2358,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00011447072, y: 65.00014}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 65}
+  m_SizeDelta: {x: 82, y: 82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1747237948
 MonoBehaviour:
@@ -2458,8 +2460,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000000090651, y: 65}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 65}
+  m_SizeDelta: {x: 82, y: 82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1877901599
 MonoBehaviour:

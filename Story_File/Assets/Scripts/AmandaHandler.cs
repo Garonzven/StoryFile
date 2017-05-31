@@ -20,6 +20,8 @@ namespace StoryFile
         public WatsonStreamingSpeechToText watsonStreaming;
         public RequestHandler requestHandler;
         public MicrophoneHandler mic;
+		public AudioClip micDown;
+		public AudioClip micUp;
 
         private const string HOLD_TEXT = "HOLD TO TALK";
         private const string RELEASE_TEXT = "RELEASE TO LISTEN";
@@ -40,6 +42,10 @@ namespace StoryFile
 				return;
 			}
 
+			if( micDown )
+			{
+				AudioSource.PlayClipAtPoint ( micDown, Vector3.zero );
+			}
 			SetupBt ( colorRelease, RELEASE_TEXT );
 			if( useWatson )
 			{
@@ -56,6 +62,10 @@ namespace StoryFile
 				return;
 			}
 
+			if( micUp )
+			{
+				AudioSource.PlayClipAtPoint ( micUp, Vector3.zero );
+			}
 			SetupBt ( colorHold, HOLD_TEXT );
 			if( useWatson )
 			{

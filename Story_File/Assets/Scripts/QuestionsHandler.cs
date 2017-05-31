@@ -125,7 +125,7 @@ public class QuestionsHandler : MonoBehaviour {
 		//Disable the record button
 		StartCoroutine( btRecord.AlphaTo ( interactable ? 1f : 0.4f, transitionsDuration ) );
 		btRecord.interactable = interactable;
-		StartCoroutine( imgMicLoading.AlphaTo ( interactable ? 0f : 0.4f, transitionsDuration ) );
+		StartCoroutine( imgMicLoading.AlphaTo ( interactable ? 0f : 0.6f, transitionsDuration ) );
 	}
 	/// <summary>
 	/// Waits for the question to be sent, and the video url (answer) to be returned and played (video).
