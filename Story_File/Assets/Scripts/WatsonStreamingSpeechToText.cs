@@ -151,22 +151,33 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 yield return new WaitForSeconds(timeRemaining);
             }
         }
-        Debug.Log(999);
+        Debug.Log("Recording ended");
 
         yield break;
     }
 
     private void OnRecognize(SpeechRecognitionEvent result)
     {
+		SpeechRecognitionResult res = null;//caching
+		SpeechRecognitionAlternative alt = null;//caching
+		string text = string.Empty;//caching
         if (result != null && result.results.Length > 0)
         {
-            foreach (var res in result.results)
+			for( int i=0; i<result.results.Length; i++ ) //foreach (var res in result.results)
             {
-                foreach (var alt in res.alternatives)
+				res = result.results [i];
+				for( int j=0; j<res.alternatives.Length; j++ ) //foreach (var alt in res.alternatives)
                 {
-                    string text = alt.transcript;
+					alt = res.alternatives [j];
+                    text = alt.transcript;
 
-                    Log.Debug("ExampleStreaming", string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? "Final" : "Interim", alt.confidence));
+                    Log.Debug("ExampleStreaming", string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? 
+						"Final" : "Interim", alt.confidence));
+					if( res.final )
+					{
+						QuestionsHandler.m_question = text;
+						StartCoroutine( QuestionsHandler.Instance.SendRequestAndWaitForAnswerURL() );
+					}
                 }
             }
         }

@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 using System;
 using DDK.Base.Extensions;
 using SimpleJSON;
+using UnityEngine.Video;
+using DDK;
 
 /// <summary>
 /// Handles the questions requests that must be sent to the server to receive the video url with the 
@@ -13,7 +15,14 @@ using SimpleJSON;
 public class QuestionsHandler : MonoBehaviour {
 
 	public string questionsUrl = "https://private-anon-907e96fa3f-storyfile.apiary-mock.com/ai/answer";
+	public VideoPlayer videoPlayer;
+	[Indent(1)]
+	public float transitionsDuration = 0.3f;
+	public CanvasGroup btRecord;
 
+	CanvasGroup _vPlayer;
+	AudioSource _videoAudioSource;
+	WaitForSeconds _wait;
 
 	public static QuestionsHandler Instance;
 	/// <summary>
@@ -46,6 +55,12 @@ public class QuestionsHandler : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
+		_videoAudioSource = videoPlayer.GetComponent<AudioSource> ();
+		_vPlayer = videoPlayer.GetComponent<CanvasGroup> ();
+		_wait = new WaitForSeconds (transitionsDuration);
+
+		videoPlayer.errorReceived += ErrorReceived;
+		videoPlayer.frameDropped += FrameDropped;
 		//SendRequest ();
 	}
 
@@ -55,6 +70,11 @@ public class QuestionsHandler : MonoBehaviour {
 	}
 
 
+	public IEnumerator SendRequestAndWaitForAnswerURL()
+	{
+		StartCoroutine (SendRequestAndWait ());
+		yield return StartCoroutine (WaitForAnswerURL ());
+	}
 	public IEnumerator SendRequestAndWait()
 	{
 		m_resquestInProgress = true;
@@ -87,8 +107,6 @@ public class QuestionsHandler : MonoBehaviour {
 			if( videoUrl == null )
 			{
 				Debug.LogError (string.Format( "Can't Parse response json: {0}", videoUrl ), gameObject);
-				//Show error video
-
 				yield break;
 			}
 			m_lastVideoUrl = videoUrl["video_url"].Value;
@@ -96,4 +114,55 @@ public class QuestionsHandler : MonoBehaviour {
 			m_resquestInProgress = false;
 		}
 	}
+	/// <summary>
+	/// Waits for the question to be sent, and the video url (answer) to be returned and played (video).
+	/// </summary>
+	public IEnumerator WaitForAnswerURL()
+	{
+		//Wait for answer (video url)
+		while (!QuestionsHandler.m_resquestInProgress)
+			yield return null;
+		while (QuestionsHandler.m_resquestInProgress)
+			yield return null;
+		if( !videoPlayer )
+		{
+			Debug.LogError ("There is no video player reference, can't play the received video url", gameObject);
+			yield break;
+		}
+		//Video Interruption
+		/*if( videoPlayer.isPlaying )
+			{
+				StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
+				yield return _wait;
+				videoPlayer.Stop();
+				_videoAudioSource.Stop ();
+			}*/
+		//Get video url, show video, and wait for it to end.
+		videoPlayer.url = QuestionsHandler.m_lastVideoUrl;
+		videoPlayer.Prepare ();
+		while (!videoPlayer.isPrepared)
+			yield return null;
+		StartCoroutine ( _vPlayer.AlphaTo ( 1f, transitionsDuration ) );
+		videoPlayer.Play ();
+		while( !videoPlayer.isPlaying )
+			yield return null;
+		Debug.Log ("Video is playing");
+		while( videoPlayer.isPlaying )
+			yield return null;
+		Debug.Log ("Video ended playing");
+		StartCoroutine( btRecord.AlphaTo ( 1f, transitionsDuration ) );
+		btRecord.interactable = true;
+		StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
+	}
+
+	#region Callbacks
+	void ErrorReceived( VideoPlayer source, string msg )
+	{
+		Debug.LogError (msg);
+	}
+	void FrameDropped( VideoPlayer source )
+	{
+		Debug.LogWarning ("Frame Dropped");
+	}
+	#endregion
 }

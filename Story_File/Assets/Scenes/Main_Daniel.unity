@@ -587,7 +587,7 @@ VideoPlayer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 485531878}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 2f4ecb6576346d94da9d09d28202d768, type: 3}
+  m_VideoClip: {fileID: 0}
   m_TargetCameraAlpha: 1
   m_TargetCamera: {fileID: 511548785}
   m_TargetTexture: {fileID: 8400000, guid: c3f98cb75c9985c4ea417e5e39ef460e, type: 2}
@@ -2080,7 +2080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1343401602
 Transform:
   m_ObjectHideFlags: 0
@@ -2134,7 +2134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 467912fb2ddbb21438698e04da75ee7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useWatson: 0
+  useWatson: 1
   btRecord: {fileID: 519597724}
   txtTalk: {fileID: 1248199473}
   imgMic: {fileID: 1877901599}
@@ -2174,8 +2174,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   url: https://www.quirksmode.org/html5/videos/big_buck_bunny.mp4
   micSource: {fileID: 1919337308}
-  videoPlayer: {fileID: 485531881}
-  transitionsDuration: 0.3
   btRecord: {fileID: 519597724}
   useWss: 0
 --- !u!114 &1419576560
@@ -2190,6 +2188,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questionsUrl: https://private-anon-907e96fa3f-storyfile.apiary-mock.com/ai/answer
+  videoPlayer: {fileID: 485531881}
+  transitionsDuration: 0.3
+  btRecord: {fileID: 519597724}
 --- !u!1 &1635038391
 GameObject:
   m_ObjectHideFlags: 0

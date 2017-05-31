@@ -7,7 +7,6 @@ using DDK.Base.Extensions;
 using System;
 using UnityEngine.Video;
 using SimpleJSON;
-using DDK;
 
 namespace StoryFile
 {
@@ -15,18 +14,12 @@ namespace StoryFile
 
 		public string url = "https://www.quirksmode.org/html5/videos/big_buck_bunny.mp4";
 		public AudioSource micSource;
-		public VideoPlayer videoPlayer;
-		[Indent(1)]
-		public float transitionsDuration = 0.3f;
 		public CanvasGroup btRecord;
         public bool useWss;
 
 
 		WebSocket _ws;
 		byte[] _clip;
-		CanvasGroup _vPlayer;
-		WaitForSeconds _wait;
-		AudioSource _videoAudioSource;
 
 
 		public static bool m_Connected { get; private set; }
@@ -41,13 +34,6 @@ namespace StoryFile
 
 		// Use this for initialization
 		void Start () {
-
-			_wait = new WaitForSeconds (transitionsDuration);
-			_videoAudioSource = videoPlayer.GetComponent<AudioSource> ();
-			_vPlayer = videoPlayer.GetComponent<CanvasGroup> ();
-
-			videoPlayer.errorReceived += ErrorReceived;
-			videoPlayer.frameDropped += FrameDropped;
 
             if( useWss )
             {
@@ -76,7 +62,7 @@ namespace StoryFile
             request.downloadHandler = downloadHandler;
 
 			//Disable the record button
-			StartCoroutine( btRecord.AlphaTo ( 0.4f, transitionsDuration ) );
+			StartCoroutine( btRecord.AlphaTo ( 0.4f, QuestionsHandler.Instance.transitionsDuration ) );
 			btRecord.interactable = false;
 
 			Debug.Log ("Sending Transcription Request");
@@ -126,48 +112,10 @@ namespace StoryFile
                 yield return StartCoroutine( _SendRequestAndWait() );//send audio and wait for transcription
                 QuestionsHandler.Instance.SendRequest();//send question
             }
-            yield return StartCoroutine( WaitForQuestionAndAnswer() );//wait for answer video url
+			yield return StartCoroutine( QuestionsHandler.Instance.WaitForAnswerURL () );//wait for answer video url
             if( useWss ) {
                 _ws.CloseAsync ();
             }
-		}
-        /// <summary>
-        /// Waits for the question to be sent, and the video url (answer) to be returned and played (video).
-        /// </summary>
-        public IEnumerator WaitForQuestionAndAnswer()
-        {
-            while (!QuestionsHandler.m_resquestInProgress)
-                yield return null;
-            while (QuestionsHandler.m_resquestInProgress)
-                yield return null;
-            if( !videoPlayer )
-            {
-                Debug.LogError ("There is no video player reference, can't play the received video url", gameObject);
-                yield break;
-            }
-			//Video Interruption
-			/*if( videoPlayer.isPlaying )
-			{
-				StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
-				yield return _wait;
-				videoPlayer.Stop();
-				_videoAudioSource.Stop ();
-			}*/
-			videoPlayer.url = QuestionsHandler.m_lastVideoUrl;
-            videoPlayer.Prepare ();
-            while (!videoPlayer.isPrepared)
-                yield return null;
-			StartCoroutine ( _vPlayer.AlphaTo ( 1f, transitionsDuration ) );
-            videoPlayer.Play ();
-			while( !videoPlayer.isPlaying )
-				yield return null;
-			Debug.Log ("Video is playing");
-			while( videoPlayer.isPlaying )
-				yield return null;
-			Debug.Log ("Video is playing");
-			StartCoroutine( btRecord.AlphaTo ( 1f, transitionsDuration ) );
-			btRecord.interactable = true;
-			StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
 		}
 			
 		#region Callbacks
@@ -197,15 +145,6 @@ namespace StoryFile
 		void OnSent( bool completed )
 		{
 			Debug.Log ( "Sent: " + completed );
-		}
-
-		void ErrorReceived( VideoPlayer source, string msg )
-		{
-			Debug.LogError (msg);
-		}
-		void FrameDropped( VideoPlayer source )
-		{
-			Debug.LogWarning ("Frame Dropped");
 		}
 		#endregion
 	}

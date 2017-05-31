@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
+using DDK.Base.Statics;
 
 namespace StoryFile
 {
@@ -23,6 +24,14 @@ namespace StoryFile
         private const string HOLD_TEXT = "HOLD TO TALK";
         private const string RELEASE_TEXT = "RELEASE TO LISTEN";
 
+		public void Start()
+		{
+			if( useWatson )
+			{
+				Utilities.Log ( Color.green, "Using Watson..", gameObject );
+			}
+			else Utilities.Log ( Color.green, "Using REST API..", gameObject );
+		}
         public void OnPointerDownButton()
         {
 			if( !btRecord.interactable )
@@ -50,7 +59,7 @@ namespace StoryFile
 			if( useWatson )
 			{
 				watsonStreaming.m_mustListen = false;
-				watsonStreaming.Listen(false);
+				//watsonStreaming.Listen(false);
 			}
 			else {
 				mic.Record(false);
