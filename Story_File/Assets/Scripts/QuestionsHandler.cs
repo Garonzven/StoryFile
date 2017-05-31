@@ -71,10 +71,10 @@ public class QuestionsHandler : MonoBehaviour {
 		//request.SetRequestHeader ("SESSION_ID", SessionHandler._SessionId);
 		request.SetRequestHeader ("SESSION_ID", "yourSessionId");
 
+		Debug.Log ("Sending Question/Answer Request");
 		AsyncOperation asyncOperation = request.Send ();
 		yield return asyncOperation;
 		Debug.Log ( "Question/Answer Request done: " + asyncOperation.isDone);
-		Debug.Log ( "Progress: " + asyncOperation.progress);
 		Debug.Log ( "Response Code: " + request.responseCode);
 		if( !string.IsNullOrEmpty (request.error )  )
 		{
@@ -92,7 +92,7 @@ public class QuestionsHandler : MonoBehaviour {
 				yield break;
 			}
 			m_lastVideoUrl = videoUrl["video_url"].Value;
-			Debug.Log ( "Last Video URL: " + m_lastVideoUrl);
+			Debug.Log ( "Last Video URL: " + _lastVideoUrl);
 			m_resquestInProgress = false;
 		}
 	}
