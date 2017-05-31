@@ -7,6 +7,7 @@ using DDK.Base.Extensions;
 using SimpleJSON;
 using UnityEngine.Video;
 using DDK;
+using DDK.Base.Statics;
 
 /// <summary>
 /// Handles the questions requests that must be sent to the server to receive the video url with the 
@@ -33,13 +34,13 @@ public class QuestionsHandler : MonoBehaviour {
 	/// <summary>
 	/// The last video url (answer) received by the server in the last question request.
 	/// </summary>
-	public static string m_lastVideoUrl {
+	public static string m_LastVideoUrl {
 		get{
 			string videoUrl = _lastVideoUrl;
 			_lastVideoUrl = null;
 			return videoUrl;
 		}
-		private set{
+		set{
 			_lastVideoUrl = value;
 		}
 	}
@@ -61,7 +62,9 @@ public class QuestionsHandler : MonoBehaviour {
 
 		videoPlayer.errorReceived += ErrorReceived;
 		videoPlayer.frameDropped += FrameDropped;
-		//SendRequest ();
+		videoPlayer.loopPointReached += LoopPointReached;
+
+		videoPlayer.skipOnDrop = false;
 	}
 
 	public void SendRequest()
@@ -91,6 +94,10 @@ public class QuestionsHandler : MonoBehaviour {
 		//request.SetRequestHeader ("SESSION_ID", SessionHandler._SessionId);
 		request.SetRequestHeader ("SESSION_ID", "yourSessionId");
 
+		//Disable the record button
+		StartCoroutine( btRecord.AlphaTo ( 0.4f, QuestionsHandler.Instance.transitionsDuration ) );
+		btRecord.interactable = false;
+
 		Debug.Log ("Sending Question/Answer Request");
 		AsyncOperation asyncOperation = request.Send ();
 		yield return asyncOperation;
@@ -109,7 +116,7 @@ public class QuestionsHandler : MonoBehaviour {
 				Debug.LogError (string.Format( "Can't Parse response json: {0}", videoUrl ), gameObject);
 				yield break;
 			}
-			m_lastVideoUrl = videoUrl["video_url"].Value;
+			m_LastVideoUrl = videoUrl["video_url"].Value;
 			Debug.Log ( "Last Video URL: " + _lastVideoUrl);
 			m_resquestInProgress = false;
 		}
@@ -120,10 +127,14 @@ public class QuestionsHandler : MonoBehaviour {
 	public IEnumerator WaitForAnswerURL()
 	{
 		//Wait for answer (video url)
-		while (!QuestionsHandler.m_resquestInProgress)
+		while (!m_resquestInProgress)
 			yield return null;
-		while (QuestionsHandler.m_resquestInProgress)
+		while (m_resquestInProgress)
 			yield return null;
+		StartCoroutine( ShowVideoInUrl () );
+	}
+	public IEnumerator ShowVideoInUrl()
+	{
 		if( !videoPlayer )
 		{
 			Debug.LogError ("There is no video player reference, can't play the received video url", gameObject);
@@ -138,7 +149,7 @@ public class QuestionsHandler : MonoBehaviour {
 				_videoAudioSource.Stop ();
 			}*/
 		//Get video url, show video, and wait for it to end.
-		videoPlayer.url = QuestionsHandler.m_lastVideoUrl;
+		videoPlayer.url = m_LastVideoUrl;
 		videoPlayer.Prepare ();
 		while (!videoPlayer.isPrepared)
 			yield return null;
@@ -147,12 +158,6 @@ public class QuestionsHandler : MonoBehaviour {
 		while( !videoPlayer.isPlaying )
 			yield return null;
 		Debug.Log ("Video is playing");
-		while( videoPlayer.isPlaying )
-			yield return null;
-		Debug.Log ("Video ended playing");
-		StartCoroutine( btRecord.AlphaTo ( 1f, transitionsDuration ) );
-		btRecord.interactable = true;
-		StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
 	}
 
 	#region Callbacks
@@ -163,6 +168,17 @@ public class QuestionsHandler : MonoBehaviour {
 	void FrameDropped( VideoPlayer source )
 	{
 		Debug.LogWarning ("Frame Dropped");
+	}
+	void LoopPointReached( VideoPlayer source )
+	{
+		if( source.isLooping )
+		{
+			Utilities.Log (Color.blue, "Loop Point Reached");
+		}
+		else Utilities.Log (Color.blue, "Video ended playing");
+		StartCoroutine( btRecord.AlphaTo ( 1f, transitionsDuration ) );
+		btRecord.interactable = true;
+		StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
 	}
 	#endregion
 }

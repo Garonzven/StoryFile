@@ -18,14 +18,18 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
 
     void Start()
     {
-        LogSystem.InstallDefaultReactors();
-        Log.Debug("ExampleStreaming", "Start();");
-
-        Active = true;
-
-        StartRecording();
+		
     }
 
+	public void Init()
+	{
+		LogSystem.InstallDefaultReactors();
+		Log.Debug("ExampleStreaming", "Start();");
+
+		Active = true;
+
+		StartRecording();
+	}
     public bool Active
     {
         get { return m_SpeechToText.IsListening; }
@@ -173,13 +177,13 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
 
                     Log.Debug("ExampleStreaming", string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? 
 						"Final" : "Interim", alt.confidence));
-					if( res.final )
-					{
-						QuestionsHandler.m_question = text;
-						StartCoroutine( QuestionsHandler.Instance.SendRequestAndWaitForAnswerURL() );
-					}
                 }
             }
         }
+		if( !m_mustListen && !QuestionsHandler.m_resquestInProgress || ( res != null && res.final ) )
+		{
+			QuestionsHandler.m_question = text;
+			StartCoroutine( QuestionsHandler.Instance.SendRequestAndWaitForAnswerURL() );
+		}
     }
 }

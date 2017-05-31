@@ -29,7 +29,7 @@ namespace StoryFile
 		/// The Transcription's web socket uri
 		/// </summary>
 		private const string WSS_TRANSCRIPTION_URI = "wss://storyfilestage.com:7070"; //ws://echo.websocket.org/
-        private const string HTTPS_TRANSCRIPTION_URI = "https://storyfilestage.com:7070/transcribe";
+        private const string HTTPS_TRANSCRIPTION_URI = "https://storyfilestage.com:7070/ai/audio_query";
 
 
 		// Use this for initialization
@@ -77,15 +77,16 @@ namespace StoryFile
             }
             else
             {
-                Debug.Log ( downloadHandler.text ); //response body (transcription)
+				Debug.Log ( downloadHandler.text ); //response body: url, videoId, question, transcription (Amanda's answer)
                 var transcription = JSON.Parse (downloadHandler.text);
                 if( transcription == null )
                 {
                     Debug.LogError (string.Format( "Can't Parse response json: {0}", transcription ), gameObject);
                     yield break;
                 }
-                QuestionsHandler.m_question = transcription["transcription"].Value;
-                Debug.Log (QuestionsHandler.m_question);
+				QuestionsHandler.m_LastVideoUrl = transcription["url"].Value;
+				Debug.Log (string.Format( "Question: {0}", transcription["question"].Value ));
+				Debug.Log (string.Format( "Answer: {0}", transcription["transcription"].Value ));
             }
         }
 
@@ -110,9 +111,8 @@ namespace StoryFile
             }
             else {
                 yield return StartCoroutine( _SendRequestAndWait() );//send audio and wait for transcription
-                QuestionsHandler.Instance.SendRequest();//send question
             }
-			yield return StartCoroutine( QuestionsHandler.Instance.WaitForAnswerURL () );//wait for answer video url
+			yield return StartCoroutine( QuestionsHandler.Instance.ShowVideoInUrl () );
             if( useWss ) {
                 _ws.CloseAsync ();
             }

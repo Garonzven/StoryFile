@@ -29,6 +29,7 @@ namespace StoryFile
 			if( useWatson )
 			{
 				Utilities.Log ( Color.green, "Using Watson..", gameObject );
+				watsonStreaming.Init ();
 			}
 			else Utilities.Log ( Color.green, "Using REST API..", gameObject );
 		}
