@@ -2029,6 +2029,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 467912fb2ddbb21438698e04da75ee7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useWatson: 1
+  btRecord: {fileID: 0}
   txtTalk: {fileID: 1248199473}
   imgMic: {fileID: 1877901599}
   imgButton: {fileID: 519597721}
@@ -2066,8 +2068,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   url: https://www.quirksmode.org/html5/videos/big_buck_bunny.mp4
-  audioSource: {fileID: 1919337308}
-  videoPlayer: {fileID: 485531881}
+  micSource: {fileID: 0}
+  btRecord: {fileID: 0}
   useWss: 0
 --- !u!114 &1419576560
 MonoBehaviour:
@@ -2081,6 +2083,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questionsUrl: https://private-anon-907e96fa3f-storyfile.apiary-mock.com/ai/answer
+  videoPlayer: {fileID: 0}
+  transitionsDuration: 0.3
+  btRecord: {fileID: 0}
 --- !u!1 &1635038391
 GameObject:
   m_ObjectHideFlags: 0
@@ -2326,11 +2331,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1919337306}
   m_Script: {fileID: 11500000, guid: d0477931eb7dd654384f7be4d14ffd37, type: 3}
---- !u!82 &1919337308 stripped
-AudioSource:
-  m_PrefabParentObject: {fileID: 82245354296975108, guid: 03d06b2a643f42e4f9390fbaf0332dfd,
-    type: 2}
-  m_PrefabInternal: {fileID: 1919337306}
 --- !u!1 &1965726307
 GameObject:
   m_ObjectHideFlags: 0
