@@ -23,6 +23,8 @@ using FullSerializer;
 using System.IO;
 using MiniJSON;
 using System;
+using System.Net;
+using DDK.Base.Extensions;
 
 namespace IBM.Watson.DeveloperCloud.Utilities
 {
@@ -158,7 +160,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     [fsProperty]
     private string m_ClassifierDirectory = "Watson/Scripts/Editor/Classifiers/";
     [fsProperty]
-    private float m_TimeOut = 30.0f;
+    private float m_TimeOut = -1/*30.0f*/;
     [fsProperty]
     private int m_MaxRestConnections = 5;
     [fsProperty]
@@ -229,12 +231,17 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     public void LoadConfig()
     {
 #if !UNITY_ANDROID || UNITY_EDITOR
-      try
+               
+        try
       {
-        if (!Directory.Exists(Application.streamingAssetsPath))
+
+       /* if (!Directory.Exists(Application.streamingAssetsPath))
           Directory.CreateDirectory(Application.streamingAssetsPath);
         LoadConfig(System.IO.File.ReadAllText(Application.streamingAssetsPath + Constants.Path.CONFIG_FILE));
-      }
+      */
+          //Leer json de servidor 
+          LoadConfig("");
+        }
       catch (System.IO.FileNotFoundException)
       {
         // mark as loaded anyway, so we don't keep retrying..
@@ -253,6 +260,21 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// <returns></returns>
     public bool LoadConfig(string json)
     {
+        string html = string.Empty;
+        string url = @"http://jcservidor.dyndns.org/Config.json";
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        request.AutomaticDecompression = DecompressionMethods.GZip;
+
+        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+        using (Stream stream = response.GetResponseStream())
+        using (StreamReader reader = new StreamReader(stream))
+        {
+            html = reader.ReadToEnd();
+        }
+        
+        Log.Warning("Config", "Getting response: {0}", html);
+        json = html;
+
       try
       {
         fsData data = null;
@@ -282,6 +304,8 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       ConfigLoaded = true;
       return false;
     }
+
+
 
     /// <summary>
     /// Save this COnfig into JSON.
@@ -425,9 +449,28 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       WWW request = new WWW(Application.streamingAssetsPath + Constants.Path.CONFIG_FILE);
       while (!request.isDone)
         yield return null;
-
       LoadConfig(request.text);
       yield break;
+    }
+
+    IEnumerator _WaitForRequestJSON(WWW www)
+    {
+
+        WWW request = new WWW("http://jcservidor.dyndns.org/Config.json");
+        while (!request.isDone)
+            yield return null;
+        //json = request.text;
+        yield return www;
+
+       /* // check for errors
+        if (www.error == null)
+        {
+            Log.Debug("WWW Ok!: ", www.data);
+        }
+        else
+        {
+            Log.Debug("WWW Error: ", www.error);
+        }*/
     }
   }
 }

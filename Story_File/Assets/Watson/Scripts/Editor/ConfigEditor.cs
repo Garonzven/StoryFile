@@ -95,14 +95,15 @@ namespace IBM.Watson.DeveloperCloud.Editor
         [UnityEditor.Callbacks.DidReloadScripts]
         private static void OnScriptsReloaded()
         {
-            if (!File.Exists(Application.streamingAssetsPath + Constants.Path.CONFIG_FILE))
+            // Para que no aparezca mensaje de configuracion cuando no esta el archivo Config.json 
+           /* if (!File.Exists(Application.streamingAssetsPath + Constants.Path.CONFIG_FILE))
             {
                 if (EditorUtility.DisplayDialog(TITLE, RUN_WIZARD_MSG, YES, NO))
                 {
                     PlayerPrefs.SetInt("WizardMode", 1);
                     EditConfig();
                 }
-            }
+            }*/
         }
 
         private void OnEnable()
@@ -156,10 +157,11 @@ namespace IBM.Watson.DeveloperCloud.Editor
 
         private static void SaveConfig()
         {
-            if (!Directory.Exists(Application.streamingAssetsPath))
+            /* Para crear el archivo Config.json en StreamingAssets descomentar lo siguiente */
+           /* if (!Directory.Exists(Application.streamingAssetsPath))
                 Directory.CreateDirectory(Application.streamingAssetsPath);
             File.WriteAllText(Application.streamingAssetsPath + "/Config.json", Config.Instance.SaveConfig());
-            RESTConnector.FlushConnectors();
+            RESTConnector.FlushConnectors();*/
         }
 
         private static string FindFile(string directory, string name)
@@ -192,7 +194,7 @@ namespace IBM.Watson.DeveloperCloud.Editor
         [MenuItem("Watson/Configuration Editor", false, 0)]
         private static void EditConfig()
         {
-            GetWindow<ConfigEditor>().Show();
+           // GetWindow<ConfigEditor>().Show();
         }
 
         private delegate void WizardStepDelegate(ConfigEditor editor);

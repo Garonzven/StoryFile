@@ -51,7 +51,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// If no listen state is received after start is sent within this time, we will timeout
     /// and stop listening. 
     /// </summary>
-    private const float LISTEN_TIMEOUT = 10.0f;
+    private const float LISTEN_TIMEOUT = -1/*10.0f*/;
     /// <summary>
     /// How many recording AudioClips will we queue before we enter a error state.
     /// </summary>
@@ -408,7 +408,8 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
 
         // After sending start, we should get into the listening state within the amount of time specified
         // by LISTEN_TIMEOUT. If not, then stop listening and record the error.
-        if (!m_ListenActive && (DateTime.Now - m_LastStartSent).TotalSeconds > LISTEN_TIMEOUT)
+        // Descomentar LISTE_TIMEOUT para usarlo
+        if (!m_ListenActive /*&& (DateTime.Now - m_LastStartSent).TotalSeconds > LISTEN_TIMEOUT*/)
         {
           Log.Error("SpeechToText", "Failed to enter listening state.");
 
@@ -508,8 +509,8 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
       while (m_ListenSocket != null)
       {
         yield return null;
-
-        if ((DateTime.Now - m_LastKeepAlive).TotalSeconds > WS_KEEP_ALIVE_TIME)
+          //DESCOMENTAR PARA USAR KEEP ALIVE
+        if (0</*(DateTime.Now - m_LastKeepAlive).TotalSeconds >*/ WS_KEEP_ALIVE_TIME)
         {
           Dictionary<string, string> nop = new Dictionary<string, string>();
           nop["action"] = "no-op";
