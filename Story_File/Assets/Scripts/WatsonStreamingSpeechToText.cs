@@ -175,7 +175,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
 					alt = res.alternatives [j];
                     text = alt.transcript;
 
-                    Log.Debug("ExampleStreaming", string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? 
+                    Log.Debug("WatsonStreamingSpeechToText", string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? 
 						"Final" : "Interim", alt.confidence));
                 }
             }

@@ -46,7 +46,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// <summary>
     /// How often to send a message to the web socket to keep it alive.
     /// </summary>
-    private const float WS_KEEP_ALIVE_TIME = 20.0f;
+    private const float WS_KEEP_ALIVE_TIME = 5.0f;
     /// <summary>
     /// If no listen state is received after start is sent within this time, we will timeout
     /// and stop listening. 
@@ -409,6 +409,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
         // After sending start, we should get into the listening state within the amount of time specified
         // by LISTEN_TIMEOUT. If not, then stop listening and record the error.
         // Descomentar LISTE_TIMEOUT para usarlo
+       //   Log.Warning(
         if (!m_ListenActive && (DateTime.Now - m_LastStartSent).TotalSeconds > LISTEN_TIMEOUT)
         {
           Log.Error("SpeechToText", "Failed to enter listening state.");
@@ -482,6 +483,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
       start["interim_results"] = EnableInterimResults;
       start["word_confidence"] = m_WordConfidence;
       start["timestamps"] = m_Timestamps;
+      start["inactivity_timeout"] = -1;// set the timeout to infinity
 
       m_ListenSocket.Send(new WSConnector.TextMessage(Json.Serialize(start)));
       m_LastStartSent = DateTime.Now;
