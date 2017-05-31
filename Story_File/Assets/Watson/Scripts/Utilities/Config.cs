@@ -264,16 +264,40 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         string url = @"http://jcservidor.dyndns.org/Config.json";
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
         request.AutomaticDecompression = DecompressionMethods.GZip;
-
-        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-        using (Stream stream = response.GetResponseStream())
-        using (StreamReader reader = new StreamReader(stream))
+        try
         {
-            html = reader.ReadToEnd();
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                html = reader.ReadToEnd();
+            }
+
+
+            Log.Warning("Config", "Web Services Response: {0}", html);
+            json = html;
         }
-        
-        Log.Warning("Config", "Getting response: {0}", html);
-        json = html;
+        catch (Exception ex)
+        {
+            json = "{\n"
+    + "\"m_ClassifierDirectory\": \"Watson/Scripts/Editor/Classifiers/\",\n"
+    + "\"m_TimeOut\": -1.0,\n"
+    + "\"m_MaxRestConnections\": 5,\n"
+    + "\"m_Credentials\": [\n"
+    + "   {\n"
+     + "\"m_ServiceID\": \"SpeechToTextV1\",\n"
+      + "\"m_URL\": \"https://stream.watsonplatform.net/speech-to-text/api\",\n"
+       + "\"m_User\": \"b5bbbcad-d720-4847-8a74-019e06cd8c1f\",\n"
+        + "\"m_Password\": \"lEvUY83Fx25c\",\n"
+         + "\"m_Apikey\": null,\n"
+          + "\"m_Note\": null\n"
+        + "}\n"
+    + "],\n"
+    + "\"m_Variables\": []\n"
++ "}\n";
+            Log.Warning("Config", "Reading Config From Local {0}", json);
+        }
+
 
       try
       {
