@@ -61,9 +61,7 @@ namespace StoryFile
             UnityWebRequest request = UnityWebRequest.Post( HTTPS_TRANSCRIPTION_URI, wwwForm ); //new UnityWebRequest ( HTTPS_TRANSCRIPTION_URI, "POST" );
             request.downloadHandler = downloadHandler;
 
-			//Disable the record button
-			StartCoroutine( btRecord.AlphaTo ( 0.4f, QuestionsHandler.Instance.transitionsDuration ) );
-			btRecord.interactable = false;
+			QuestionsHandler.Instance.ValidateUI (false);
 
 			Debug.Log ("Sending Transcription Request");
             AsyncOperation www = request.Send ();

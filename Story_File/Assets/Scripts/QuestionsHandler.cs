@@ -20,6 +20,7 @@ public class QuestionsHandler : MonoBehaviour {
 	[Indent(1)]
 	public float transitionsDuration = 0.3f;
 	public CanvasGroup btRecord;
+	public CanvasGroup imgMicLoading;
 
 	CanvasGroup _vPlayer;
 	AudioSource _videoAudioSource;
@@ -94,9 +95,7 @@ public class QuestionsHandler : MonoBehaviour {
 		//request.SetRequestHeader ("SESSION_ID", SessionHandler._SessionId);
 		request.SetRequestHeader ("SESSION_ID", "yourSessionId");
 
-		//Disable the record button
-		StartCoroutine( btRecord.AlphaTo ( 0.4f, QuestionsHandler.Instance.transitionsDuration ) );
-		btRecord.interactable = false;
+		ValidateUI (false);
 
 		Debug.Log ("Sending Question/Answer Request");
 		AsyncOperation asyncOperation = request.Send ();
@@ -120,6 +119,13 @@ public class QuestionsHandler : MonoBehaviour {
 			Debug.Log ( "Last Video URL: " + _lastVideoUrl);
 			m_resquestInProgress = false;
 		}
+	}
+	public void ValidateUI( bool interactable )
+	{
+		//Disable the record button
+		StartCoroutine( btRecord.AlphaTo ( interactable ? 1f : 0.4f, transitionsDuration ) );
+		btRecord.interactable = interactable;
+		StartCoroutine( imgMicLoading.AlphaTo ( interactable ? 0f : 0.4f, transitionsDuration ) );
 	}
 	/// <summary>
 	/// Waits for the question to be sent, and the video url (answer) to be returned and played (video).
@@ -176,8 +182,7 @@ public class QuestionsHandler : MonoBehaviour {
 			Utilities.Log (Color.blue, "Loop Point Reached");
 		}
 		else Utilities.Log (Color.blue, "Video ended playing");
-		StartCoroutine( btRecord.AlphaTo ( 1f, transitionsDuration ) );
-		btRecord.interactable = true;
+		ValidateUI (true);
 		StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
 	}
 	#endregion
