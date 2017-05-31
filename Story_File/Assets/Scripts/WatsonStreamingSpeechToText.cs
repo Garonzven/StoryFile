@@ -24,7 +24,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
 	public void Init()
 	{
 		LogSystem.InstallDefaultReactors();
-		Log.Debug("ExampleStreaming", "Start();");
+		Log.Debug("WatsonSpeechToText", "Start();");
 
 		Active = true;
 
