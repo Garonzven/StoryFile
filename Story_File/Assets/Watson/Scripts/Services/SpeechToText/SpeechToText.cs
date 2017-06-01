@@ -51,7 +51,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// If no listen state is received after start is sent within this time, we will timeout
     /// and stop listening. 
     /// </summary>
-    private const float LISTEN_TIMEOUT = 10.0f;
+    private const float LISTEN_TIMEOUT = 300.0f;
     /// <summary>
     /// How many recording AudioClips will we queue before we enter a error state.
     /// </summary>
