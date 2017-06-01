@@ -1375,7 +1375,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 267.53845, y: 130.05255}
+  m_AnchoredPosition: {x: 267.53845, y: 130.05254}
   m_SizeDelta: {x: 79.99999, y: 75}
   m_Pivot: {x: 0.5, y: 3.1760197}
 --- !u!114 &793417874
@@ -2190,7 +2190,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7954e86d763f5004b9d7fc7f29d6bf60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useProduction: 0
   questionsUrl: https://private-anon-907e96fa3f-storyfile.apiary-mock.com/ai/answer
+  productionUrl: https://polls.apiblueprint.org/ai/answer
   videoPlayer: {fileID: 485531881}
   transitionsDuration: 0.3
   btRecord: {fileID: 519597724}
@@ -2666,7 +2668,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 162, y: 130.05255}
+  m_AnchoredPosition: {x: 162, y: 130.05254}
   m_SizeDelta: {x: 123.07692, y: 75}
   m_Pivot: {x: 0.5, y: 3.1760197}
 --- !u!114 &1997868143

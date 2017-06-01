@@ -53,7 +53,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
             }
         }
     }
-	public void Listen( bool listen )
+	/*public void Listen( bool listen )
 	{
         if( listen )
         {
@@ -67,7 +67,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
         while( m_SpeechToText.IsListening )
             yield return null;
         Listen( true );
-    }
+    }*/
 
     public void StartRecording()
     {
@@ -93,6 +93,12 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
         Active = false;
 
         Log.Debug("ExampleStreaming", "Error! {0}", error);
+        StartCoroutine( StartListeningAfterStopped() );
+    }
+    private IEnumerator StartListeningAfterStopped()
+    {
+        yield return new WaitForSeconds( 0.5f );
+        Init();
     }
 
     private IEnumerator RecordingHandler()

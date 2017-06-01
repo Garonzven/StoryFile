@@ -15,7 +15,9 @@ using DDK.Base.Statics;
 /// </summary>
 public class QuestionsHandler : MonoBehaviour {
 
+    public bool useProduction;
 	public string questionsUrl = "https://private-anon-907e96fa3f-storyfile.apiary-mock.com/ai/answer";
+    public string productionUrl = "https://polls.apiblueprint.org/ai/answer";
 	public VideoPlayer videoPlayer;
 	[Indent(1)]
 	public float transitionsDuration = 0.3f;
@@ -90,7 +92,7 @@ public class QuestionsHandler : MonoBehaviour {
 			contentType = "application-json"
 		};
 		DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer ();
-		UnityWebRequest request = new UnityWebRequest ( questionsUrl, "POST", downloadHandler, uploadHandler );
+        UnityWebRequest request = new UnityWebRequest ( useProduction ? productionUrl : questionsUrl, "POST", downloadHandler, uploadHandler );
 		request.SetRequestHeader ("APP-TOKEN", "secureapptoken");
 		//request.SetRequestHeader ("SESSION_ID", SessionHandler._SessionId);
 		request.SetRequestHeader ("SESSION_ID", "yourSessionId");
