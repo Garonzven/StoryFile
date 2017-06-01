@@ -8,6 +8,7 @@ using SimpleJSON;
 using UnityEngine.Video;
 using DDK;
 using DDK.Base.Statics;
+using DDK.Networking;
 
 /// <summary>
 /// Handles the questions requests that must be sent to the server to receive the video url with the 
@@ -78,6 +79,11 @@ public class QuestionsHandler : MonoBehaviour {
 
 	public IEnumerator SendRequestAndWaitForAnswerURL()
 	{
+        yield return CheckInternet.CheckAndWait().Run();
+        if( !CheckInternet.m_IsConnectionAvailable )
+        {
+            yield break;
+        }
 		StartCoroutine (SendRequestAndWait ());
 		yield return StartCoroutine (WaitForAnswerURL ());
 	}

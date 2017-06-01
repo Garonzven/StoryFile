@@ -29,7 +29,7 @@ namespace DDK.Networking {
 		/// The check timeout. The time that must pass before the check is set to wrong.
 		/// </summary>
 		[Tooltip("The check timeout. The time that must pass before the check is set to wrong.")]
-		public int waitingTime = 2;
+		public int waitingTime = 30;
 		public bool checkOnEnable;
 		public InternetCheckedEvents events = new InternetCheckedEvents();
 		
@@ -38,15 +38,15 @@ namespace DDK.Networking {
 		/// <summary>
 		/// Returns the result of the last check.
 		/// </summary>
-		public static bool _isConnectionAvailable = false;
-		public static int _waitTime{
+        public static bool m_IsConnectionAvailable { get; private set; }
+		public static int m_WaitTime{
 			get{
 				return Instance.waitingTime;
 			}
 		}
-		public static bool _waitTimeExceeded{
+		public static bool m_WaitTimeExceeded{
 			get{
-				return Time.time - _pingStartTime > _waitTime;
+				return Time.time - _pingStartTime > m_WaitTime;
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace DDK.Networking {
 				_InternetAvailable();
 				enabled = false;
 			}
-			else if ( _waitTimeExceeded ) 
+			else if ( m_WaitTimeExceeded ) 
 			{
 				InternetIsNotAvailable();
 				_ping = null;
@@ -88,13 +88,13 @@ namespace DDK.Networking {
 		public static IEnumerator<float> CheckAndWait()
 		{
 			StartCheck();
-			while( !_waitTimeExceeded )
+			while( !m_WaitTimeExceeded )
 				yield return 0f;
 			yield return 0f;
 		}	
 		/// <summary>
-		/// Starts the check. You must check the values of _waitTimeExceeded and _isConnectionAvailable. You can also 
-		/// call the CheckAndWait() coroutine and yield for it to finish, then just check the value of _isConnectionAvailable
+		/// Starts the check. You must check the values of m_WaitTimeExceeded and m_IsConnectionAvailable. You can also 
+		/// call the CheckAndWait() coroutine and yield for it to finish, then just check the value of m_IsConnectionAvailable
 		/// </summary>
 		public static void StartCheck()
 		{
@@ -127,12 +127,12 @@ namespace DDK.Networking {
 			Instance.enabled = true;
 		}	
 		/// <summary>
-		/// Set _isConnectionAvailable to false and shows a debug and popup message (if specified in the instance parameters).
+		/// Set m_IsConnectionAvailable to false and shows a debug and popup message (if specified in the instance parameters).
 		/// </summary>
 		public static void InternetIsNotAvailable()
 		{
-			Debug.Log("No Internet :(");
-			_isConnectionAvailable = false;
+            Debug.LogWarning("No Internet :(");
+			m_IsConnectionAvailable = false;
 			if( Instance.events.onNoInternetAvailable != null )
 				Instance.events.onNoInternetAvailable.Invoke();
 		}	
@@ -140,7 +140,7 @@ namespace DDK.Networking {
 		private static void _InternetAvailable()
 		{
 			Debug.Log("Internet is available! ;)");
-			_isConnectionAvailable = true;
+			m_IsConnectionAvailable = true;
 			if( Instance.events.onInternetAvailable != null )
 				Instance.events.onInternetAvailable.Invoke();
 		}
