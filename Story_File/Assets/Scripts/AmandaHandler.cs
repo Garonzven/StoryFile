@@ -61,21 +61,22 @@ namespace StoryFile
 			{
 				return;
 			}
-
-			if( micUp )
-			{
-				AudioSource.PlayClipAtPoint ( micUp, Vector3.zero );
-			}
+                
 			SetupBt ( colorHold, HOLD_TEXT );
 			if( useWatson )
 			{
 				watsonStreaming.m_mustListen = false;
+                StartCoroutine( QuestionsHandler.Instance.SendRequestAndWaitForAnswerURL() );
 				//watsonStreaming.Listen(false);
 			}
 			else {
 				mic.Record(false);
 				requestHandler.ConnectAsyncAndSendAudio();
 			}
+            if( micUp )
+            {
+                AudioSource.PlayClipAtPoint ( micUp, Vector3.zero );
+            }
         }
 
 
