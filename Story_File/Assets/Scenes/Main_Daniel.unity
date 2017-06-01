@@ -2135,7 +2135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 467912fb2ddbb21438698e04da75ee7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useWatson: 0
+  useWatson: 1
   btRecord: {fileID: 519597724}
   txtTalk: {fileID: 1248199473}
   imgMic: {fileID: 1877901599}

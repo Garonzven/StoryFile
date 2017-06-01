@@ -51,7 +51,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// If no listen state is received after start is sent within this time, we will timeout
     /// and stop listening. 
     /// </summary>
-    private const float LISTEN_TIMEOUT = 10.0f;
+    private const float LISTEN_TIMEOUT = 600.0f;
     /// <summary>
     /// How many recording AudioClips will we queue before we enter a error state.
     /// </summary>
@@ -409,7 +409,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
         // After sending start, we should get into the listening state within the amount of time specified
         // by LISTEN_TIMEOUT. If not, then stop listening and record the error.
         // Descomentar LISTE_TIMEOUT para usarlo
-       //   Log.Warning(
+        Log.Error("LISTEN_TIMEOUT", "="+LISTEN_TIMEOUT);
         if (!m_ListenActive && (DateTime.Now - m_LastStartSent).TotalSeconds > LISTEN_TIMEOUT)
         {
           Log.Error("SpeechToText", "Failed to enter listening state.");
