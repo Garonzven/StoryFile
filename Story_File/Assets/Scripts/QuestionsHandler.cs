@@ -79,11 +79,11 @@ public class QuestionsHandler : MonoBehaviour {
 
 	public IEnumerator SendRequestAndWaitForAnswerURL()
 	{
-        yield return CheckInternet.CheckAndWait().Run();
+        /*yield return CheckInternet.CheckAndWait().Run();
         if( !CheckInternet.m_IsConnectionAvailable )
         {
             yield break;
-        }
+        }*/
 		StartCoroutine (SendRequestAndWait ());
 		yield return StartCoroutine (WaitForAnswerURL ());
 	}
