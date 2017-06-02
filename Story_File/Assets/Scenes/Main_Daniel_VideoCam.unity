@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 350980311}
   - component: {fileID: 350980313}
   - component: {fileID: 350980312}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RawImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,7 +635,7 @@ Camera:
   m_GameObject: {fileID: 511548784}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.14901961, g: 0.18823531, b: 0.21568629, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -651,7 +651,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2381,7 +2381,7 @@ GameObject:
   - component: {fileID: 1743711242}
   - component: {fileID: 1743711241}
   - component: {fileID: 1743711240}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Video Player URL Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2404,7 +2404,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00000024220415, y: 0.00018157942}
+  m_AnchoredPosition: {x: -0.00000024220415, y: 0.00018157944}
   m_SizeDelta: {x: -0.5999756, y: -0.19995117}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1743711240
@@ -2506,7 +2506,7 @@ Camera:
   m_GameObject: {fileID: 1743711238}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -2522,7 +2522,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2542,7 +2542,7 @@ VideoPlayer:
   m_GameObject: {fileID: 1743711238}
   m_Enabled: 1
   m_VideoClip: {fileID: 32900000, guid: 2f4ecb6576346d94da9d09d28202d768, type: 3}
-  m_TargetCameraAlpha: 1
+  m_TargetCameraAlpha: 0
   m_TargetCamera: {fileID: 1743711242}
   m_TargetTexture: {fileID: 8400000, guid: 2fa9780dd2c5cf84d98b5a6668257c4c, type: 2}
   m_TargetMaterialRenderer: {fileID: 0}
@@ -2551,13 +2551,15 @@ VideoPlayer:
   m_AspectRatio: 1
   m_DataSource: 1
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 0
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
+  m_AudioOutputMode: 1
+  m_TargetAudioSources:
+  - {fileID: 1743711241}
+  m_DirectAudioVolumes:
+  - 1
   m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0

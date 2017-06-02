@@ -90,6 +90,7 @@ public class QuestionsHandler : MonoBehaviour {
 	}
 	public IEnumerator SendRequestAndWait()
 	{
+		Debug.Log (videoPlayer.url);
 		m_resquestInProgress = true;
 		Dictionary<string, object> bodyData = new Dictionary<string, object> () {
 			{ "question", m_question },
@@ -168,6 +169,16 @@ public class QuestionsHandler : MonoBehaviour {
 		videoPlayer.url = m_LastVideoUrl;
 		videoPlayer.Prepare ();
 	}
+	void AnimateShowVideo( bool show )
+	{
+		if( videoPlayer.renderMode != VideoRenderMode.RenderTexture )
+		{
+			StartCoroutine ( videoPlayer.AlphaTo ( show ? 1f : 0f, transitionsDuration ) );
+		}
+		else {
+			StartCoroutine ( _vPlayer.AlphaTo ( show ? 1f : 0f, transitionsDuration ) );
+		}
+	}
 
 	#region Callbacks
 	void ErrorReceived( VideoPlayer source, string msg )
@@ -186,14 +197,13 @@ public class QuestionsHandler : MonoBehaviour {
 		}
 		else Utilities.Log (Color.blue, "Video ended playing");
 		ValidateUI (true);
-		StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
+		AnimateShowVideo (false);
 		localVideoPlayer.Play ();
-        videoPlayer.url = string.Empty;
 	}
 	void OnPrepared( VideoPlayer source )
 	{
 		localVideoPlayer.Pause ();
-		StartCoroutine ( _vPlayer.AlphaTo ( 1f, transitionsDuration ) );
+		AnimateShowVideo (true);
         source.Play ();
         m_question = string.Empty;
 		Debug.Log ("Video started playing");

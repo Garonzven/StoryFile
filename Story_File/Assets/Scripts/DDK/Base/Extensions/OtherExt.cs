@@ -15,6 +15,7 @@ using DDK.Base.Events;
 using DDK.Base.Animations;
 using DDK.Base.Statics;
 using MovementEffects;
+using UnityEngine.Video;
 
 
 #if USE_GAMES_DEVELOPMENT
@@ -1261,6 +1262,39 @@ namespace DDK.Base.Extensions
             system.PauseForCo( duration, realTime ).Start();
         }
         #endregion
+
+		#region VIDEO PLAYER
+		/// <summary>
+		/// Fades the specified video player, until it reaches the specified target value.
+		/// </summary>
+		public static IEnumerator AlphaTo( this VideoPlayer vPlayer, float target, float duration )
+		{
+			if( !vPlayer )
+				yield break;
+
+			ValidationFlag validationFlags = vPlayer.gameObject.AddGetComponent<ValidationFlag>();
+			if( validationFlags.IsFlagged( ValidationFlag.Flags.Alpha ) )//allow animation to be overridden.
+			{
+				validationFlags.SetFlagged( ValidationFlag.Flags.Alpha, false );
+				yield return null;//wait a frame so current animation can finish
+			}
+			validationFlags.SetFlagged( ValidationFlag.Flags.Alpha, true );
+
+			float iniAlpha = vPlayer.targetCameraAlpha;
+			float time = Time.unscaledDeltaTime;
+			while( time <= duration ) //while( group.alpha != target )
+			{
+				vPlayer.targetCameraAlpha = Mathf.Lerp( iniAlpha, target, time / duration );
+				yield return null;
+				if( !vPlayer || !validationFlags.IsFlagged( ValidationFlag.Flags.Alpha ) )
+					yield break;
+				time += Time.unscaledDeltaTime;
+			}
+			vPlayer.targetCameraAlpha = target;
+
+			validationFlags.SetFlagged( ValidationFlag.Flags.Alpha, false );
+		}
+		#endregion
     }
 
 
