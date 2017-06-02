@@ -105,6 +105,9 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
     {
         Log.Debug("ExampleStreaming", "devices: {0}", Microphone.devices);
         m_Recording = Microphone.Start(m_MicrophoneID, true, m_RecordingBufferSize, m_RecordingHZ);
+        #if UNITY_IOS
+        iPhoneSpeaker.ForceToSpeaker();
+        #endif
         yield return null;      // let m_RecordingRoutine get set..
 
         if (m_Recording == null)

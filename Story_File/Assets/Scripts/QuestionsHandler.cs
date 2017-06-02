@@ -21,9 +21,10 @@ public class QuestionsHandler : MonoBehaviour {
     public string productionUrl = "https://polls.apiblueprint.org/ai/answer";
 	public VideoPlayer videoPlayer;
 	[Indent(1)]
-	public float transitionsDuration = 0.3f;
+	public float transitionsDuration = 0.5f;
 	public CanvasGroup btRecord;
 	public CanvasGroup imgMicLoading;
+	public VideoPlayer localVideoPlayer;
 
 	CanvasGroup _vPlayer;
 	AudioSource _videoAudioSource;
@@ -156,22 +157,16 @@ public class QuestionsHandler : MonoBehaviour {
 		}
 		//Video Interruption
 		/*if( videoPlayer.isPlaying )
-			{
-				StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
-				yield return _wait;
-				videoPlayer.Stop();
-				_videoAudioSource.Stop ();
-			}*/
+		{
+			StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
+			yield return _wait;
+			videoPlayer.Stop();
+			_videoAudioSource.Stop ();
+		}*/
 		//Get video url, show video, and wait for it to end.
+		videoPlayer.prepareCompleted += OnPrepared;
 		videoPlayer.url = m_LastVideoUrl;
 		videoPlayer.Prepare ();
-		while (!videoPlayer.isPrepared)
-			yield return null;
-		StartCoroutine ( _vPlayer.AlphaTo ( 1f, transitionsDuration ) );
-		videoPlayer.Play ();
-		while( !videoPlayer.isPlaying )
-			yield return null;
-		Debug.Log ("Video is playing");
 	}
 
 	#region Callbacks
@@ -192,6 +187,16 @@ public class QuestionsHandler : MonoBehaviour {
 		else Utilities.Log (Color.blue, "Video ended playing");
 		ValidateUI (true);
 		StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
+		localVideoPlayer.Play ();
+        videoPlayer.url = string.Empty;
+	}
+	void OnPrepared( VideoPlayer source )
+	{
+		localVideoPlayer.Pause ();
+		StartCoroutine ( _vPlayer.AlphaTo ( 1f, transitionsDuration ) );
+        source.Play ();
+        m_question = string.Empty;
+		Debug.Log ("Video started playing");
 	}
 	#endregion
 }
