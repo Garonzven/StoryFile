@@ -102,12 +102,11 @@ namespace StoryFile
         /// </summary>
 		public IEnumerator ConnectAsyncSendAudioAndWait()
 		{
-            /*yield return CheckInternet.CheckAndWait().Run();
+            yield return CheckInternet.CheckAndWait().Run();
             if( !CheckInternet.m_IsConnectionAvailable )
             {
-                Debug.LogError( "No internet available" );
                 yield break;
-            }*/
+            }
 			_clip = micSource.clip.EncodeToWav ();
             if( useWss ) {
                 _ws.ConnectAsync ();

@@ -68,6 +68,7 @@ public class QuestionsHandler : MonoBehaviour {
 		videoPlayer.errorReceived += ErrorReceived;
 		videoPlayer.frameDropped += FrameDropped;
 		videoPlayer.loopPointReached += LoopPointReached;
+		videoPlayer.prepareCompleted += OnPrepared;
 
 		videoPlayer.skipOnDrop = false;
 	}
@@ -80,11 +81,11 @@ public class QuestionsHandler : MonoBehaviour {
 
 	public IEnumerator SendRequestAndWaitForAnswerURL()
 	{
-        /*yield return CheckInternet.CheckAndWait().Run();
+        yield return CheckInternet.CheckAndWait().Run();
         if( !CheckInternet.m_IsConnectionAvailable )
         {
             yield break;
-        }*/
+        }
 		StartCoroutine (SendRequestAndWait ());
 		yield return StartCoroutine (WaitForAnswerURL ());
 	}
@@ -133,8 +134,8 @@ public class QuestionsHandler : MonoBehaviour {
 	public void ValidateUI( bool interactable )
 	{
 		//Disable the record button
-		StartCoroutine( btRecord.AlphaTo ( interactable ? 1f : 0.4f, transitionsDuration ) );
-		btRecord.interactable = interactable;
+		/*StartCoroutine( btRecord.AlphaTo ( interactable ? 1f : 0.4f, transitionsDuration ) );
+		btRecord.interactable = interactable;*/
 		StartCoroutine( imgMicLoading.AlphaTo ( interactable ? 0f : 0.6f, transitionsDuration ) );
 	}
 	/// <summary>
@@ -157,15 +158,14 @@ public class QuestionsHandler : MonoBehaviour {
 			yield break;
 		}
 		//Video Interruption
-		/*if( videoPlayer.isPlaying )
+		if( videoPlayer.isPlaying )
 		{
-			StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
+			StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );//hide current url video
 			yield return _wait;
 			videoPlayer.Stop();
 			_videoAudioSource.Stop ();
-		}*/
+		}
 		//Get video url, show video, and wait for it to end.
-		videoPlayer.prepareCompleted += OnPrepared;
 		videoPlayer.url = m_LastVideoUrl;
 		videoPlayer.Prepare ();
 	}
@@ -184,6 +184,7 @@ public class QuestionsHandler : MonoBehaviour {
 	void ErrorReceived( VideoPlayer source, string msg )
 	{
 		Debug.LogError (msg);
+		ValidateUI (true);
 	}
 	void FrameDropped( VideoPlayer source )
 	{
