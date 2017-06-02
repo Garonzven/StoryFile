@@ -21,7 +21,7 @@ public class QuestionsHandler : MonoBehaviour {
     public string productionUrl = "https://polls.apiblueprint.org/ai/answer";
 	public VideoPlayer videoPlayer;
 	[Indent(1)]
-	public float transitionsDuration = 0.3f;
+	public float transitionsDuration = 0.5f;
 	public CanvasGroup btRecord;
 	public CanvasGroup imgMicLoading;
 	public VideoPlayer localVideoPlayer;
@@ -188,12 +188,14 @@ public class QuestionsHandler : MonoBehaviour {
 		ValidateUI (true);
 		StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );
 		localVideoPlayer.Play ();
+        videoPlayer.url = string.Empty;
 	}
 	void OnPrepared( VideoPlayer source )
 	{
 		localVideoPlayer.Pause ();
 		StartCoroutine ( _vPlayer.AlphaTo ( 1f, transitionsDuration ) );
-		videoPlayer.Play ();
+        source.Play ();
+        m_question = string.Empty;
 		Debug.Log ("Video started playing");
 	}
 	#endregion

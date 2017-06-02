@@ -369,7 +369,7 @@ namespace DDK.Base.Extensions
 			#if UNITY_ANDROID
 			Application.OpenURL( "market://details?id="+ Application.identifier );
 			#elif UNITY_IOS
-			Application.OpenURL("itms-apps://itunes.apple.com/app/"+ Application.bundleIdentifier );
+			Application.OpenURL("itms-apps://itunes.apple.com/app/"+ Application.identifier );
 			#endif
 		}
 		public void InvokeButtonOnClick( Button bt )
