@@ -7,6 +7,7 @@ using DDK.Base.Extensions;
 using System;
 using UnityEngine.Video;
 using SimpleJSON;
+using DDK.Networking;
 
 namespace StoryFile
 {
@@ -101,6 +102,12 @@ namespace StoryFile
         /// </summary>
 		public IEnumerator ConnectAsyncSendAudioAndWait()
 		{
+            /*yield return CheckInternet.CheckAndWait().Run();
+            if( !CheckInternet.m_IsConnectionAvailable )
+            {
+                Debug.LogError( "No internet available" );
+                yield break;
+            }*/
 			_clip = micSource.clip.EncodeToWav ();
             if( useWss ) {
                 _ws.ConnectAsync ();

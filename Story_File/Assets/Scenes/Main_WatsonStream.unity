@@ -2043,6 +2043,8 @@ MonoBehaviour:
   watsonStreaming: {fileID: 1343401603}
   requestHandler: {fileID: 1419576559}
   mic: {fileID: 1919337307}
+  micDown: {fileID: 0}
+  micUp: {fileID: 0}
 --- !u!4 &1419576558
 Transform:
   m_ObjectHideFlags: 0
@@ -2086,6 +2088,7 @@ MonoBehaviour:
   videoPlayer: {fileID: 0}
   transitionsDuration: 0.3
   btRecord: {fileID: 0}
+  imgMicLoading: {fileID: 0}
 --- !u!1 &1635038391
 GameObject:
   m_ObjectHideFlags: 0

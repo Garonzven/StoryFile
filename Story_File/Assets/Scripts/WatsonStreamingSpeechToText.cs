@@ -53,7 +53,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
             }
         }
     }
-	public void Listen( bool listen )
+	/*public void Listen( bool listen )
 	{
         if( listen )
         {
@@ -67,7 +67,7 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
         while( m_SpeechToText.IsListening )
             yield return null;
         Listen( true );
-    }
+    }*/
 
     public void StartRecording()
     {
@@ -93,6 +93,12 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
         Active = false;
 
         Log.Debug("ExampleStreaming", "Error! {0}", error);
+        StartCoroutine( StartListeningAfterStopped() );
+    }
+    private IEnumerator StartListeningAfterStopped()
+    {
+        yield return new WaitForSeconds( 0.5f );
+        Init();
     }
 
     private IEnumerator RecordingHandler()
@@ -114,6 +120,12 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
 
         while (m_RecordingRoutine != 0 && m_Recording != null)
         {
+            if( !m_mustListen )
+            {
+                yield return null;
+                continue;
+            }
+
             int writePos = Microphone.GetPosition(m_MicrophoneID);
             if (writePos > m_Recording.samples || !Microphone.IsRecording(m_MicrophoneID))
             {
@@ -123,11 +135,6 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
                 yield break;
             }
 
-			if( !m_mustListen )
-			{
-				yield return null;
-				continue;
-			}
             if ((bFirstBlock && writePos >= midPoint)
               || (!bFirstBlock && writePos < midPoint))
             {
@@ -175,15 +182,15 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
 					alt = res.alternatives [j];
                     text = alt.transcript;
 
-                    Log.Debug("ExampleStreaming", string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? 
+                    Log.Debug("WatsonStreamingSpeechToText", string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? 
 						"Final" : "Interim", alt.confidence));
                 }
             }
         }
-		if( !m_mustListen && !QuestionsHandler.m_resquestInProgress || ( res != null && res.final ) )
+        QuestionsHandler.m_question = text;
+        /*if( !m_mustListen && res != null && res.final )
 		{
-			QuestionsHandler.m_question = text;
 			StartCoroutine( QuestionsHandler.Instance.SendRequestAndWaitForAnswerURL() );
-		}
+		}*/
     }
 }
