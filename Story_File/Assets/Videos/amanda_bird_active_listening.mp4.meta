@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2f4ecb6576346d94da9d09d28202d768
+guid: ed20bee5c7b4e5041b1815c0d6abdce1
 timeCreated: 1495566514
 licenseType: Free
 VideoClipImporter:
@@ -68,7 +68,7 @@ VideoClipImporter:
     encodedStartFrame: 0
     encodedEndFrame: 6076
     streamedResource:
-      source: library/metadata/2f/2f4ecb6576346d94da9d09d28202d768.resource
+      source: library/metadata/ed/ed20bee5c7b4e5041b1815c0d6abdce1.resource
       offset: 0
       size: 4971180
   userData: 
