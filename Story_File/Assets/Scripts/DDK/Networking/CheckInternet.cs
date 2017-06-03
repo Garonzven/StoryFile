@@ -89,7 +89,11 @@ namespace DDK.Networking {
 		{
 			StartCheck();
 			while( !m_WaitTimeExceeded )
-				yield return 0f;
+            {
+                yield return 0f;
+                if( m_IsConnectionAvailable )
+                    yield break;
+            }
 			yield return 0f;
 		}	
 		/// <summary>
@@ -98,6 +102,7 @@ namespace DDK.Networking {
 		/// </summary>
 		public static void StartCheck()
 		{
+            m_IsConnectionAvailable = false;
 			if( !Instance )
 			{
 				Debug.LogError("There is no instance of CheckInternet in the scene. Calling StartCheck() won't work..");

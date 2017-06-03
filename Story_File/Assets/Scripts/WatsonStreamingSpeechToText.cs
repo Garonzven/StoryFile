@@ -191,9 +191,5 @@ public class WatsonStreamingSpeechToText : MonoBehaviour
             }
         }
         QuestionsHandler.m_question = text;
-        /*if( !m_mustListen && res != null && res.final )
-		{
-			StartCoroutine( QuestionsHandler.Instance.SendRequestAndWaitForAnswerURL() );
-		}*/
     }
 }

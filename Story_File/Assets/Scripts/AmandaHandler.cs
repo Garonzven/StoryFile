@@ -67,7 +67,6 @@ namespace StoryFile
 			{
 				watsonStreaming.m_mustListen = false;
                 StartCoroutine( QuestionsHandler.Instance.SendRequestAndWaitForAnswerURL() );
-				//watsonStreaming.Listen(false);
 			}
 			else {
 				mic.Record(false);

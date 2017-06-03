@@ -62,7 +62,7 @@ namespace StoryFile
             UnityWebRequest request = UnityWebRequest.Post( HTTPS_TRANSCRIPTION_URI, wwwForm ); //new UnityWebRequest ( HTTPS_TRANSCRIPTION_URI, "POST" );
             request.downloadHandler = downloadHandler;
 
-			QuestionsHandler.Instance.ValidateUI (false);
+            QuestionsHandler.Instance.ShowLoading (true);
 
 			Debug.Log ("Sending Transcription Request");
             AsyncOperation www = request.Send ();

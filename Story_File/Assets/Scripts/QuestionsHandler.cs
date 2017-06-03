@@ -28,7 +28,7 @@ public class QuestionsHandler : MonoBehaviour {
 
 	CanvasGroup _vPlayer;
 	AudioSource _videoAudioSource;
-	WaitForSeconds _wait;
+    WaitForSeconds _wait;WaitForSeconds _oneSec;
 
 	public static QuestionsHandler Instance;
 	/// <summary>
@@ -64,6 +64,7 @@ public class QuestionsHandler : MonoBehaviour {
 		_videoAudioSource = videoPlayer.GetComponent<AudioSource> ();
 		_vPlayer = videoPlayer.GetComponent<CanvasGroup> ();
 		_wait = new WaitForSeconds (transitionsDuration);
+        _oneSec = new WaitForSeconds( 1f );
 
 		videoPlayer.errorReceived += ErrorReceived;
 		videoPlayer.frameDropped += FrameDropped;
@@ -91,7 +92,12 @@ public class QuestionsHandler : MonoBehaviour {
 	}
 	public IEnumerator SendRequestAndWait()
 	{
-		Debug.Log (videoPlayer.url);
+        ShowLoading (true);
+        while( string.IsNullOrEmpty( m_question ) )
+        {
+            yield return null;
+        }
+        yield return _oneSec;//Wait in case the audio streaming is still recognizing..
 		m_resquestInProgress = true;
 		Dictionary<string, object> bodyData = new Dictionary<string, object> () {
 			{ "question", m_question },
@@ -105,8 +111,6 @@ public class QuestionsHandler : MonoBehaviour {
 		request.SetRequestHeader ("APP-TOKEN", "secureapptoken");
 		//request.SetRequestHeader ("SESSION_ID", SessionHandler._SessionId);
 		request.SetRequestHeader ("SESSION_ID", "yourSessionId");
-
-		ValidateUI (false);
 
 		Debug.Log ("Sending Question/Answer Request");
 		AsyncOperation asyncOperation = request.Send ();
@@ -131,12 +135,12 @@ public class QuestionsHandler : MonoBehaviour {
 			m_resquestInProgress = false;
 		}
 	}
-	public void ValidateUI( bool interactable )
+    public void ShowLoading( bool show )//This used to be ValidateUI()
 	{
 		//Disable the record button
 		/*StartCoroutine( btRecord.AlphaTo ( interactable ? 1f : 0.4f, transitionsDuration ) );
 		btRecord.interactable = interactable;*/
-		StartCoroutine( imgMicLoading.AlphaTo ( interactable ? 0f : 0.6f, transitionsDuration ) );
+		StartCoroutine( imgMicLoading.AlphaTo ( show ? 1f : 0f, transitionsDuration ) );
 	}
 	/// <summary>
 	/// Waits for the question to be sent, and the video url (answer) to be returned and played (video).
@@ -144,9 +148,9 @@ public class QuestionsHandler : MonoBehaviour {
 	public IEnumerator WaitForAnswerURL()
 	{
 		//Wait for answer (video url)
-		while (!m_resquestInProgress)
+		while (!m_resquestInProgress)//wait for request to be in progress
 			yield return null;
-		while (m_resquestInProgress)
+		while (m_resquestInProgress)//wait for request to return the response video url
 			yield return null;
 		StartCoroutine( ShowVideoInUrl () );
 	}
@@ -160,7 +164,8 @@ public class QuestionsHandler : MonoBehaviour {
 		//Video Interruption
 		if( videoPlayer.isPlaying )
 		{
-			StartCoroutine ( _vPlayer.AlphaTo ( 0f, transitionsDuration ) );//hide current url video
+            _AnimateShowVideo (false);//hide current url video
+            localVideoPlayer.Play ();
 			yield return _wait;
 			videoPlayer.Stop();
 			_videoAudioSource.Stop ();
@@ -169,7 +174,7 @@ public class QuestionsHandler : MonoBehaviour {
 		videoPlayer.url = m_LastVideoUrl;
 		videoPlayer.Prepare ();
 	}
-	void AnimateShowVideo( bool show )
+	void _AnimateShowVideo( bool show )
 	{
 		if( videoPlayer.renderMode != VideoRenderMode.RenderTexture )
 		{
@@ -184,7 +189,7 @@ public class QuestionsHandler : MonoBehaviour {
 	void ErrorReceived( VideoPlayer source, string msg )
 	{
 		Debug.LogError (msg);
-		ValidateUI (true);
+        ShowLoading (false);
 	}
 	void FrameDropped( VideoPlayer source )
 	{
@@ -197,17 +202,17 @@ public class QuestionsHandler : MonoBehaviour {
 			Utilities.Log (Color.blue, "Loop Point Reached");
 		}
 		else Utilities.Log (Color.blue, "Video ended playing");
-		ValidateUI (true);
-		AnimateShowVideo (false);
+		_AnimateShowVideo (false);
 		localVideoPlayer.Play ();
 	}
 	void OnPrepared( VideoPlayer source )
 	{
 		localVideoPlayer.Pause ();
-		AnimateShowVideo (true);
+		_AnimateShowVideo (true);
         source.Play ();
         m_question = string.Empty;
 		Debug.Log ("Video started playing");
+        ShowLoading (false);
 	}
 	#endregion
 }
