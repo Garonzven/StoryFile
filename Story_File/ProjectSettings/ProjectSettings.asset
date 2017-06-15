@@ -270,8 +270,8 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
-  locationUsageDescription: 
+  cameraUsageDescription: not used
+  locationUsageDescription: not used
   microphoneUsageDescription: Record your voice to talk with Amanda
   switchNetLibKey: 
   switchSocketMemoryPoolSize: 6144
